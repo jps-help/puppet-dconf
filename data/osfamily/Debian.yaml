@@ -1,0 +1,3 @@
+---
+dconf_packages:
+  - dconf-cli

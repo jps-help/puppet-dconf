@@ -19,41 +19,27 @@ information to include in your README.
 
 ## Description
 
-Briefly tell users why they might want to use your module. Explain what your
-module does and what kind of problems users can solve with it.
-
-This should be a fairly short description helps the user decide if your module
-is what they want.
+This module will install dconf and allow you to manage GNOME desktop environment via Puppet.
 
 ## Setup
 
 ### What dconf affects **OPTIONAL**
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
-
-If there's more that they should know about, though, this is the place to
-mention:
-
-* Files, packages, services, or operations that the module will alter, impact,
-  or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
+- dconf package
+- dconf profiles under `/etc/dconf/profile/`
+- dconf db files under `/etc/dconf/db/`
 
 ### Setup Requirements **OPTIONAL**
 
-If your module requires anything extra before setting up (pluginsync enabled,
-another module, etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section here.
+See module dependencies for more details.
 
 ### Beginning with dconf
 
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most basic
-use of the module.
+For basic use of this module, first make sure the module is installed on your puppet-server, then add the following to your manifest:
+```
+include dconf
+```
+This will simply install the dconf packages for your distro. 
 
 ## Usage
 
