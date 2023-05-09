@@ -10,11 +10,11 @@
   "tags": ["dconf","gnome","gdm"],
   "dependencies": [
     {
-      "name": "puppetlabs-inifile",
+      "name": "puppetlabs/inifile",
       "version_requirement": ">= 2.3.0"
     },
     {
-      "name": "puppetlabs-stdlib",
+      "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.25.0"
     }
   ],
