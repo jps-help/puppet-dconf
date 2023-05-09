@@ -1,32 +1,37 @@
-# @summary Base dconf class
-#
-# Installs and configures dconf
+# @summary Installs and configures dconf
 #
 # @example Declaring the class
 #   include dconf
 #
-# @param manage_package Whether to manage the dconf packages.
+# @param manage_packages Whether to manage the dconf packages.
 #
 # @param dconf_packages The packages required for dconf management.
 #
-# @param dconf_profiles Hash of dconf profiles
+# @param profiles Hash of dconf profiles
+#
+# @param dbs Hash of dconf db and settings
 class dconf (
-  Boolean $manage_package = true,
+  Boolean $manage_packages = true,
   Array $dconf_packages = ['dconf-cli'],
-  Optional[Hash] $dconf_profiles = undef,
-  Optional[Hash] $dconf_configs = undef,
+  Optional[Hash] $profiles = undef,
+  Optional[Hash] $dbs = undef,
 ) {
-  if $manage_package {
+  if $manage_packages {
     ensure_packages($dconf_packages)
   }
-  if $dconf_profiles {
-    $dconf_profiles.each |String $profile, Hash $values| {
-      ensure_resource('dconf::profile',$profile,$values)
+  if $profiles {
+    $profiles.each |String $profile, Array $values| {
+      ensure_resource('dconf::profile', $profile, { 'entries' => $values })
     }
   }
-  if $dconf_configs {
-    $dconf_configs.each |String $db, Hash $values| {
-      ensure_resource('dconf::config',$db,$values)
+  if $dbs {
+    $dbs.each |String $db, Hash $values| {
+      ensure_resource('dconf::db', $db, { 'settings' => $values })
     }
+  }
+  exec { 'dconf_update':
+    path        => ['/usr/bin','/usr/sbin'],
+    command     => 'dconf update',
+    refreshonly => true,
   }
 }
