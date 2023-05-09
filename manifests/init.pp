@@ -20,7 +20,7 @@ class dconf (
     ensure_packages($dconf_packages)
   }
   if $profiles {
-    $profiles.each |String $profile, Array $values| {
+    $profiles.each |String $profile, Hash $values| {
       ensure_resource('dconf::profile', $profile, { 'entries' => $values })
     }
   }

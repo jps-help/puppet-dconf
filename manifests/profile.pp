@@ -20,17 +20,17 @@ define dconf::profile (
   Stdlib::Absolutepath $profile_dir = '/etc/dconf/profile',
   Stdlib::Absolutepath $profile_file = "${profile_dir}/${name}",
   String $profile_file_mode = '0644',
-  Optional[Array] $entries = undef,
+  Optional[Hash] $entries = undef,
 ) {
   concat { "profile_${name}":
     target => $profile_file,
     mode   => $profile_file_mode,
   }
-  $entries.each |String[1] $entry| {
-    concat::fragment { "profile_${name}_${entry}":
+  $entries.each |String[1] $db_name, Hash $attrs| {
+    concat::fragment { "profile_${name}_${db_name}":
       target  => $profile_file,
-      content => $entry,
-      require => File[$profile_file],
+      content => "${db_name}\n",
+      require => File["profile_${name}"],
     }
   }
 }
