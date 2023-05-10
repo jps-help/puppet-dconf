@@ -12,7 +12,7 @@
 # @param dbs Hash of dconf databases, settings and locks
 class dconf (
   Boolean $manage_packages = true,
-  Array $packages = ['dconf-cli'],
+  Array $packages = [],
   Optional[Hash] $profiles = undef,
   Optional[Hash] $dbs = undef,
 ) {
