@@ -46,6 +46,7 @@ define dconf::db (
   Stdlib::Absolutepath $base_dir = '/etc/dconf/db',
   Stdlib::Absolutepath $db_dir = "${base_dir}/${name}.d",
   Stdlib::Absolutepath $db_file = "${db_dir}/00-default",
+  Boolean $purge = true,
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
   Stdlib::Absolutepath $locks_file = "${locks_dir}/00-default",
   String $db_dir_mode  = '0755',
@@ -56,9 +57,10 @@ define dconf::db (
   Hash $inifile_defaults = { ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], },
 ) {
   file { $db_dir:
-    ensure => 'directory',
-    mode   => $db_dir_mode,
-    purge  => true,
+    ensure  => 'directory',
+    mode    => $db_dir_mode,
+    purge   => $purge,
+    recurse => $purge,
   }
   file { $db_file:
     ensure  => 'file',
@@ -70,8 +72,10 @@ define dconf::db (
   }
   if $locks {
     file { $locks_dir:
-      ensure => 'directory',
-      mode   => $locks_dir_mode,
+      ensure  => 'directory',
+      mode    => $locks_dir_mode,
+      purge   => $purge,
+      recurse => $purge,
     }
     concat { "db_${name}_locks":
       path    => $locks_file,
