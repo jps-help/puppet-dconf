@@ -1,4 +1,4 @@
-# @summary Valid dconf profile entries
+# @summary Data type for valid dconf profile entries
 type Dconf::DBEntries = Hash[
   String[1],                                                # The name of the database
   Struct[{
