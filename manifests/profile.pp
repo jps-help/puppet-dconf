@@ -30,10 +30,18 @@
 define dconf::profile (
   Stdlib::Absolutepath $profile_dir = '/etc/dconf/profile',
   Stdlib::Absolutepath $profile_file = "${profile_dir}/${name}",
+  String $profile_dir_mode = '0755',
   String $profile_file_mode = '0644',
+  Boolean $purge = false,
   String $default_entry_order = '25',
   Optional[Hash] $entries = undef,
 ) {
+  file { $profile_dir:
+    ensure  => 'directory',
+    mode    => $profile_dir_mode,
+    purge   => $purge,
+    recurse => $purge,
+  }
   concat { "profile_${name}":
     path  => $profile_file,
     mode  => $profile_file_mode,
