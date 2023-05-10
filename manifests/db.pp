@@ -35,7 +35,7 @@
 #
 # @param locks_file_mode File permissions for dconf db locks file
 #
-# @param db_dir_purge Whether to purge the dconf db directory of unmanaged files
+# @param purge Whether to purge unmanaged files (keyfiles and lock files)
 #
 # @param inifile_defaults Default parameters to parse to inifile provider
 #
