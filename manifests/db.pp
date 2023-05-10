@@ -13,6 +13,18 @@
 #     },
 #   }
 #
+# @example Lockdown dconf settings
+#   dconf::db { 'local':
+#     settings => {
+#       'system/proxy/http' => {
+#         'host' => '172.16.0.1',
+#         'enabled' => 'true',
+#       },
+#     locks => [
+#       'system/proxy/http/host',
+#       'system/proxy/http/enabled',
+#     ],
+#
 # @param settings Hash of dconf settings
 #
 # @param locks Array of dconf settings to lock
@@ -26,6 +38,8 @@
 # @param locks_dir Absolute path of the dconf db locks directory
 #
 # @param locks_file Absolute path of the dconf db locks file
+#
+# @param base_dir_mode File permissions for dconf db base directory
 #
 # @param db_dir_mode File permissions for dconf db directory
 #
@@ -46,16 +60,20 @@ define dconf::db (
   Stdlib::Absolutepath $base_dir = '/etc/dconf/db',
   Stdlib::Absolutepath $db_dir = "${base_dir}/${name}.d",
   Stdlib::Absolutepath $db_file = "${db_dir}/00-default",
-  Boolean $purge = true,
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
   Stdlib::Absolutepath $locks_file = "${locks_dir}/00-default",
+  String $base_dir_mode = '0755',
   String $db_dir_mode  = '0755',
   String $db_file_mode = '0644',
   String $locks_dir_mode = '0755',
   String $locks_file_mode = '0644',
-  Boolean $db_dir_purge = true,
+  Boolean $purge = true,
   Hash $inifile_defaults = { ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], },
 ) {
+  file { $base_dir:
+    ensure => 'directory',
+    mode   => $base_dir_mode,
+  }
   file { $db_dir:
     ensure  => 'directory',
     mode    => $db_dir_mode,

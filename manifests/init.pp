@@ -5,19 +5,19 @@
 #
 # @param manage_packages Whether to manage the dconf packages.
 #
-# @param dconf_packages The packages required for dconf management.
+# @param packages The packages required for dconf management.
 #
 # @param profiles Hash of dconf profiles
 #
 # @param dbs Hash of dconf databases, settings and locks
 class dconf (
   Boolean $manage_packages = true,
-  Array $dconf_packages = ['dconf-cli'],
+  Array $packages = ['dconf-cli'],
   Optional[Hash] $profiles = undef,
   Optional[Hash] $dbs = undef,
 ) {
   if $manage_packages {
-    ensure_packages($dconf_packages)
+    ensure_packages($packages)
   }
   if $profiles {
     $profiles.each |String $profile, Dconf::DBEntries $values| {
