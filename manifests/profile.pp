@@ -22,7 +22,11 @@
 #
 # @param profile_file Absolute path to dconf profile file
 #
+# @param profile_dir_mode File permissions for dconf profile directory
+#
 # @param profile_file_mode File permissions for dconf profile file
+#
+# @param purge Control whether to purge the dconf profile directory of unmanaged files
 #
 # @param default_entry_order Default order of profile entries
 #
