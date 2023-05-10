@@ -9,7 +9,7 @@
 #
 # @param profiles Hash of dconf profiles
 #
-# @param dbs Hash of dconf db and settings
+# @param dbs Hash of dconf databases, settings and locks
 class dconf (
   Boolean $manage_packages = true,
   Array $dconf_packages = ['dconf-cli'],
@@ -26,7 +26,7 @@ class dconf (
   }
   if $dbs {
     $dbs.each |String $db, Hash $values| {
-      ensure_resource('dconf::db', $db, { 'settings' => $values })
+      ensure_resource('dconf::db', $db, { 'settings' => $values['settings'], 'locks' => $values['locks'] })
     }
   }
   exec { 'dconf_update':

@@ -35,16 +35,16 @@ define dconf::profile (
   Optional[Hash] $entries = undef,
 ) {
   concat { "profile_${name}":
-    target => $profile_file,
-    mode   => $profile_file_mode,
-    order  => 'numeric',
+    path  => $profile_file,
+    mode  => $profile_file_mode,
+    order => 'numeric',
   }
   $entries.each |String[1] $db_name, Hash $attrs| {
     concat::fragment { "profile_${name}_${db_name}":
       target  => $profile_file,
       content => "${attrs['type']}-db:${db_name}\n",
       order   => get($attrs,'order',$default_entry_order),
-      require => File["profile_${name}"],
+      require => Concat["profile_${name}"],
     }
   }
 }

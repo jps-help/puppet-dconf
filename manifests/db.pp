@@ -15,6 +15,8 @@
 #
 # @param settings Hash of dconf settings
 #
+# @param locks Array of dconf settings to lock
+#
 # @param base_dir Absolute path of the dconf db base directory
 #
 # @param db_dir Absolute path of the dconf db directory
@@ -32,6 +34,7 @@
 # @param
 define dconf::db (
   Optional[Hash] $settings = undef,
+  Optional[Array] $locks = undef,
   Stdlib::Absolutepath $base_dir = '/etc/dconf/db',
   Stdlib::Absolutepath $db_dir = "${base_dir}/${name}.d",
   Stdlib::Absolutepath $db_file = "${db_dir}/00-default",
@@ -51,6 +54,6 @@ define dconf::db (
     require => File[$db_dir],
   }
   if $settings {
-    inifile::create_ini_settings($settings,$inifile_defaults)
+    inifile::create_ini_settings($settings,$inifile_defaults) 
   }
 }
