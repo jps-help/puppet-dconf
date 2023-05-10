@@ -84,10 +84,11 @@ define dconf::db (
       require => File[$locks_dir],
     }
     $locks.each |$lock| {
-      concat::fragment { "db_${name}_locks_${lock}": 
+      concat::fragment { "db_${name}_locks_${lock}":
         target  => $locks_file,
         content => "${lock}\n",
         require => Concat["db_${name}_locks"],
+        notify  => Exec['dconf_update'],
       }
     }
   }
