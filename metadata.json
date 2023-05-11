@@ -1,7 +1,7 @@
 {
-  "name": "simple-dconf",
+  "name": "jmckenzie-dconf",
   "version": "0.1.0",
-  "author": "James Paton-Smith",
+  "author": "James McKenzie",
   "summary": "Install and configure dconf",
   "license": "Apache-2.0",
   "project_page": "https://github.com/jps-help/dconf",
