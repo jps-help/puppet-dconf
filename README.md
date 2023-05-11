@@ -101,7 +101,61 @@ enabled = true
 system/proxy/http/enabled
 system/proxy/http/host
 ```
+### Configure dconf with hiera
+This module can also be configured entirely using hiera.
+To configure the above with hiera, use the following snippet:
+```
+dconf::profiles:
+  'example_profile':
+    entries:
+      'user':
+        type: 'user'
+        order: 10
+      'local':
+        type: 'system'
+        order: 21
+      'site':
+        type: 'system'
+        order 22
+dconf::dbs:
+  'local':
+    settings:
+      'system/proxy/http':
+        'host': "'172.16.0.1'"
+        'enabled': 'true'
+    locks:
+      - 'system/proxy/http/host'
+      - 'system/proxy/http/enabled'
 
+```
+Note that some dconf values must be double quoted to ensure the resulting dconf ini keyfile contains the correct data.
+
+### Removing dconf profiles and databases
+To remove dconf profiles and databases, you can use the `ensure` parameter.
+#### Resource declaration
+```
+dconf::profile { 'example_profile':
+  ensure => 'absent',
+}
+dconf::db { 'local':
+  ensure => 'absent',
+}
+```
+#### Hiera declaration
+```
+dconf::profiles:
+  'example_profile':
+    ensure: 'absent'
+dconf::dbs:
+  'local':
+    ensure: 'absent'
+```
+Ensuring the absence of a dconf database will cause the db file, db directory, and associated locks to all be removed. If you just want to remove the locks you can supply an empty array for the resource:
+```
+dconf::dbs:
+  'local':
+    locks: []
+```
 ## Limitations
 
 This module only ensures the specified settings are present in your dconf keyfiles. Unmanaged INI settings in your keyfiles will not be automatically removed.

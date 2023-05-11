@@ -20,13 +20,13 @@ class dconf (
     ensure_packages($packages)
   }
   if $profiles {
-    $profiles.each |String $profile, Dconf::DBEntries $values| {
-      ensure_resource('dconf::profile', $profile, { 'entries' => $values })
+    $profiles.each |String $profile, Hash $values| {
+      ensure_resource('dconf::profile', $profile, $values)
     }
   }
   if $dbs {
     $dbs.each |String $db, Hash $values| {
-      ensure_resource('dconf::db', $db, { 'settings' => $values['settings'], 'locks' => $values['locks'] })
+      ensure_resource('dconf::db', $db, $values)
     }
   }
   exec { 'dconf_update':
