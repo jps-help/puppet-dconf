@@ -16,7 +16,7 @@ This module will install dconf and allow you to manage GNOME desktop environment
 
 ## Setup
 
-### What dconf affects **OPTIONAL**
+### What dconf affects
 
 - dconf package
 - dconf profiles under `/etc/dconf/profile/`
