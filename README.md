@@ -1,11 +1,4 @@
 # dconf
-
-Welcome to your new module. A short overview of the generated parts can be found
-in the [PDK documentation][1].
-
-The README template below provides a starting point with details about what
-information to include in your README.
-
 ## Table of Contents
 
 1. [Description](#description)
@@ -19,41 +12,28 @@ information to include in your README.
 
 ## Description
 
-Briefly tell users why they might want to use your module. Explain what your
-module does and what kind of problems users can solve with it.
-
-This should be a fairly short description helps the user decide if your module
-is what they want.
+This module will install dconf and allow you to manage GNOME desktop environment via Puppet.
 
 ## Setup
 
-### What dconf affects **OPTIONAL**
+### What dconf affects
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
+- dconf package
+- dconf profiles under `/etc/dconf/profile/`
+- dconf db files under `/etc/dconf/db/`
+- dconf db lock files under `/etc/dconf/db/YOUR_PROFILE/locks/`
 
-If there's more that they should know about, though, this is the place to
-mention:
+### Setup Requirements
 
-* Files, packages, services, or operations that the module will alter, impact,
-  or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-another module, etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section here.
+See module dependencies for more details.
 
 ### Beginning with dconf
 
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most basic
-use of the module.
+For basic use of this module, first make sure the module is installed on your puppet-server, then add the following to your manifest:
+```
+include dconf
+```
+On its own, this will simply install the dconf packages for your distro.
 
 ## Usage
 
@@ -62,55 +42,128 @@ users how to use your module to solve problems, and be sure to include code
 examples. Include three to five examples of the most important or common tasks a
 user can accomplish with your module. Show users how to accomplish more complex
 tasks that involve different types, classes, and functions working in tandem.
-
-## Reference
-
-This section is deprecated. Instead, add reference information to your code as
-Puppet Strings comments, and then use Strings to generate a REFERENCE.md in your
-module. For details on how to add code comments and generate documentation with
-Strings, see the [Puppet Strings documentation][2] and [style guide][3].
-
-If you aren't ready to use Strings yet, manually create a REFERENCE.md in the
-root of your module directory and list out each of your module's classes,
-defined types, facts, functions, Puppet tasks, task plans, and resource types
-and providers, along with the parameters for each.
-
-For each element (class, defined type, function, and so on), list:
-
-* The data type, if applicable.
-* A description of what the element does.
-* Valid values, if the data type doesn't make it obvious.
-* Default value, if any.
-
-For example:
+### Creating a dconf profile
+```
+dconf::profile { 'example_profile':
+  entries => [
+    'user' => {
+      'type'  => 'user',
+      'order' => 10,
+     },
+    'local' => {
+      'type'  => 'system',
+      'order' => 21,
+    },
+    'site' => {
+      'type'  => 'system',
+      'order' => 22,
+    },
+  ],
+}
+```
+Will result in the following profile at `/etc/dconf/profile/example_profile`
+```
+user-db:user
+system-db:local
+system-db:site
+```
+### Creating a dconf settings file with locks
+```
+dconf::db { 'local':
+  settings => {
+    'system/proxy/http' => {
+      'host' => '172.16.0.1',
+      'enabled' => 'true',
+    },
+  locks => [
+    'system/proxy/http/host',
+    'system/proxy/http/enabled',
+  ],
+```
+Will result in the following dconf database structure:
+```
+/etc/dconf/
+|-- db
+|   |-- local
+|   `-- local.d
+|       |-- 00-default
+|       `-- locks
+|           `-- 00-default
+```
+#### local.d/00-default
+```
+[system/proxy/http]
+host = '172.16.0.1'
+enabled = true
+```
+#### local.d/locks/00-default
+```
+system/proxy/http/enabled
+system/proxy/http/host
+```
+### Configure dconf with hiera
+This module can also be configured entirely using hiera.
+To configure the above with hiera, use the following snippet:
+```
+dconf::profiles:
+  'example_profile':
+    entries:
+      'user':
+        type: 'user'
+        order: 10
+      'local':
+        type: 'system'
+        order: 21
+      'site':
+        type: 'system'
+        order 22
+dconf::dbs:
+  'local':
+    settings:
+      'system/proxy/http':
+        'host': "'172.16.0.1'"
+        'enabled': 'true'
+    locks:
+      - 'system/proxy/http/host'
+      - 'system/proxy/http/enabled'
 
 ```
-### `pet::cat`
+Note that some dconf values must be double quoted to ensure the resulting dconf ini keyfile contains the correct data.
 
-#### Parameters
-
-##### `meow`
-
-Enables vocalization in your cat. Valid options: 'string'.
-
-Default: 'medium-loud'.
+### Removing dconf profiles and databases
+To remove dconf profiles and databases, you can use the `ensure` parameter.
+#### Resource declaration
 ```
-
+dconf::profile { 'example_profile':
+  ensure => 'absent',
+}
+dconf::db { 'local':
+  ensure => 'absent',
+}
+```
+#### Hiera declaration
+```
+dconf::profiles:
+  'example_profile':
+    ensure: 'absent'
+dconf::dbs:
+  'local':
+    ensure: 'absent'
+```
+Ensuring the absence of a dconf database will cause the db file, db directory, and associated locks to all be removed. If you just want to remove the locks you can supply an empty array for the resource:
+```
+dconf::dbs:
+  'local':
+    locks: []
+```
 ## Limitations
 
-In the Limitations section, list any incompatibilities, known issues, or other
-warnings.
+This module only ensures the specified settings are present in your dconf keyfiles. Unmanaged INI settings in your keyfiles will not be automatically removed.
+This is a limitation of the `puppetlabs/inifile` module used to generate the dconf keyfiles.
 
 ## Development
 
-In the Development section, tell other users the ground rules for contributing
-to your project and how they should submit their work.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel are
-necessary or important to include here. Please use the `##` header.
+When contributing, please check your code conforms to the Puppet language style guide: https://www.puppet.com/docs/puppet/latest/style_guide.html
 
 [1]: https://puppet.com/docs/pdk/latest/pdk_generating_modules.html
 [2]: https://puppet.com/docs/puppet/latest/puppet_strings.html
