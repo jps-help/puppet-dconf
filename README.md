@@ -44,7 +44,7 @@ user can accomplish with your module. Show users how to accomplish more complex
 tasks that involve different types, classes, and functions working in tandem.
 ### Creating a dconf profile
 ```
-dconf::profile { 'example_profile':
+dconf::profile { 'user':
   entries => [
     'user' => {
       'type'  => 'user',
@@ -61,7 +61,7 @@ dconf::profile { 'example_profile':
   ],
 }
 ```
-Will result in the following profile at `/etc/dconf/profile/example_profile`
+Will result in the following profile at `/etc/dconf/profile/user`
 ```
 user-db:user
 system-db:local
@@ -76,8 +76,8 @@ dconf::db { 'local':
       'enabled' => 'true',
     },
   locks => [
-    'system/proxy/http/host',
-    'system/proxy/http/enabled',
+    '/system/proxy/http/host',
+    '/system/proxy/http/enabled',
   ],
 ```
 Will result in the following dconf database structure:
@@ -98,15 +98,15 @@ enabled = true
 ```
 #### local.d/locks/00-default
 ```
-system/proxy/http/enabled
-system/proxy/http/host
+/system/proxy/http/enabled
+/system/proxy/http/host
 ```
 ### Configure dconf with hiera
 This module can also be configured entirely using hiera.
 To configure the above with hiera, use the following snippet:
 ```
 dconf::profiles:
-  'example_profile':
+  'user':
     entries:
       'user':
         type: 'user'
@@ -124,8 +124,8 @@ dconf::dbs:
         'host': "'172.16.0.1'"
         'enabled': 'true'
     locks:
-      - 'system/proxy/http/host'
-      - 'system/proxy/http/enabled'
+      - '/system/proxy/http/host'
+      - '/system/proxy/http/enabled'
 
 ```
 Note that some dconf values must be double quoted to ensure the resulting dconf ini keyfile contains the correct data.
@@ -134,7 +134,7 @@ Note that some dconf values must be double quoted to ensure the resulting dconf 
 To remove dconf profiles and databases, you can use the `ensure` parameter.
 #### Resource declaration
 ```
-dconf::profile { 'example_profile':
+dconf::profile { 'user':
   ensure => 'absent',
 }
 dconf::db { 'local':
@@ -144,7 +144,7 @@ dconf::db { 'local':
 #### Hiera declaration
 ```
 dconf::profiles:
-  'example_profile':
+  'user':
     ensure: 'absent'
 dconf::dbs:
   'local':
