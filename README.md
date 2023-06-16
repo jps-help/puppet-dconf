@@ -45,7 +45,7 @@ tasks that involve different types, classes, and functions working in tandem.
 ### Creating a dconf profile
 ```
 dconf::profile { 'user':
-  entries => [
+  entries => {
     'user' => {
       'type'  => 'user',
       'order' => 10,
@@ -58,7 +58,7 @@ dconf::profile { 'user':
       'type'  => 'system',
       'order' => 22,
     },
-  ],
+  },
 }
 ```
 Will result in the following profile at `/etc/dconf/profile/user`
