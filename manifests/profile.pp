@@ -2,7 +2,7 @@
 #
 # @example Creating dconf profiles
 #   dconf::profile { 'example_profile':
-#     entries => [
+#     entries => {
 #       'user' => {
 #         'type'  => 'user',
 #         'order' => 10,
@@ -15,7 +15,7 @@
 #         'type'  => 'system',
 #         'order' => 21,
 #       },
-#     ],
+#     },
 #   }
 #
 # @param profile_dir Absolute path to dconf profile directory
