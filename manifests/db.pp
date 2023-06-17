@@ -33,6 +33,8 @@
 #
 # @param db_dir Absolute path of the dconf db directory
 #
+# @param db_filename Name of the dconf db file
+#
 # @param db_file Absolute path of the dconf db file
 #
 # @param locks_dir Absolute path of the dconf db locks directory
@@ -61,7 +63,8 @@ define dconf::db (
   Optional[Array] $locks = undef,
   Stdlib::Absolutepath $base_dir = '/etc/dconf/db',
   Stdlib::Absolutepath $db_dir = "${base_dir}/${name}.d",
-  Stdlib::Absolutepath $db_file = "${db_dir}/00-default",
+  String $db_filename = "00-default",
+  Stdlib::Absolutepath $db_file = "${db_dir}/${db_filename}",
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
   Stdlib::Absolutepath $locks_file = "${locks_dir}/00-default",
   String $base_dir_mode = '0755',
@@ -73,14 +76,17 @@ define dconf::db (
   Enum['present','absent'] $ensure = 'present',
   Hash $inifile_defaults = { ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], },
 ) {
-  ensure_resource(file, $base_dir, { ensure => 'directory',mode   => $base_dir_mode })
+  ensure_resource(file, $base_dir, {
+    ensure => 'directory',
+    mode   => $base_dir_mode,
+  })
   if $ensure == 'present' {
-    file { $db_dir:
+    ensure_resource(file, $db_dir, {
       ensure  => 'directory',
       mode    => $db_dir_mode,
       purge   => $purge,
       recurse => $purge,
-    }
+    })
     file { $db_file:
       ensure  => 'file',
       mode    => $db_file_mode,
