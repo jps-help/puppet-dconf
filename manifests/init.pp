@@ -33,5 +33,6 @@ class dconf (
     path        => ['/usr/bin','/usr/sbin'],
     command     => 'dconf update',
     refreshonly => true,
+    umask       => '0022',
   }
 }
