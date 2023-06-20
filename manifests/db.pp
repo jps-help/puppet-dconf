@@ -99,15 +99,15 @@ define dconf::db (
   Hash $inifile_defaults = { ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], },
 ) {
   ensure_resource(file, $base_dir, {
-    ensure => 'directory',
-    mode   => $base_dir_mode,
+      ensure => 'directory',
+      mode   => $base_dir_mode,
   })
   if $ensure == 'present' {
     ensure_resource(file, $db_dir, {
-      ensure  => 'directory',
-      mode    => $db_dir_mode,
-      purge   => $purge,
-      recurse => $purge,
+        ensure  => 'directory',
+        mode    => $db_dir_mode,
+        purge   => $purge,
+        recurse => $purge,
     })
     file { $db_file:
       ensure  => 'file',
