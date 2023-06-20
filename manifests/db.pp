@@ -85,7 +85,7 @@ define dconf::db (
   Optional[Array] $locks = undef,
   Stdlib::Absolutepath $base_dir = '/etc/dconf/db',
   Stdlib::Absolutepath $db_dir = "${base_dir}/${name}.d",
-  String $db_filename = "00-default",
+  String $db_filename = '00-default',
   Stdlib::Absolutepath $db_file = "${db_dir}/${db_filename}",
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
   Stdlib::Absolutepath $locks_file = "${locks_dir}/00-default",
