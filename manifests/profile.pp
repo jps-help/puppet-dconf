@@ -1,7 +1,7 @@
 # @summary Create dconf profiles
 #
 # @example Creating dconf profiles
-#   dconf::profile { 'example_profile':
+#   dconf::profile { 'local':
 #     entries => {
 #       'user' => {
 #         'type'  => 'user',
@@ -33,6 +33,7 @@
 # @param default_entry_order Default order of profile entries
 #
 # @param entries List of entries to include in the dconf profile
+#
 define dconf::profile (
   Stdlib::Absolutepath $profile_dir = '/etc/dconf/profile',
   Stdlib::Absolutepath $profile_file = "${profile_dir}/${name}",
