@@ -4,7 +4,7 @@
 #   dconf::db { 'local':
 #     settings => {
 #       'system/proxy/http' => {
-#         'host' => '172.16.0.1',
+#         'host' => "'172.16.0.1'",
 #         'enabled' => 'true',
 #       },
 #       'org/gnome/desktop/background' => {
@@ -17,13 +17,35 @@
 #   dconf::db { 'local':
 #     settings => {
 #       'system/proxy/http' => {
-#         'host' => '172.16.0.1',
+#         'host' => "'172.16.0.1'",
 #         'enabled' => 'true',
 #       },
 #     locks => [
 #       'system/proxy/http/host',
 #       'system/proxy/http/enabled',
 #     ],
+#
+# @example Managing multiple config files for the same db
+#   dconf::db { 'system-proxy':
+#     db_dir      => '/etc/dconf/db/local',
+#     db_filename => 'system-proxy',
+#     settings    => {
+#       'system/proxy/http' => {
+#         'host'    => "'172.16.0.1'",
+#         'enabled' => 'true',
+#       },
+#     },
+#   }
+#   dconf::db { 'disable-microphone':
+#     db_dir      => '/etc/dconf/db/local',
+#     db_filename => 'disable-micrphone',
+#     settings    => {
+#       'org/gnome/desktop/privacy' => {
+#         'disable-microphone' => 'true',
+#       },
+#     },
+#   }
+
 #
 # @param settings Hash of dconf settings
 #
