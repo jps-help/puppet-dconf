@@ -5,7 +5,7 @@
 #
 # @param manage_packages Whether to manage the dconf packages.
 #
-# @param packages The packages required for dconf management.
+# @param packages The packages required for dconf management. Typically sourced via hiera.
 #
 # @param profiles Hash of dconf profiles
 #

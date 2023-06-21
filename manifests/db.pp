@@ -45,7 +45,6 @@
 #       },
 #     },
 #   }
-
 #
 # @param settings Hash of dconf settings
 #
@@ -79,7 +78,6 @@
 #
 # @param inifile_defaults Default parameters to parse to inifile provider
 #
-# @param
 define dconf::db (
   Optional[Hash] $settings = undef,
   Optional[Array] $locks = undef,
