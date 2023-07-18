@@ -142,6 +142,7 @@ The following parameters are available in the `dconf::db` defined type:
 * [`db_filename`](#db_filename)
 * [`db_file`](#db_file)
 * [`locks_dir`](#locks_dir)
+* [`locks_filename`](#locks_filename)
 * [`locks_file`](#locks_file)
 * [`base_dir_mode`](#base_dir_mode)
 * [`db_dir_mode`](#db_dir_mode)
@@ -208,13 +209,21 @@ Absolute path of the dconf db locks directory
 
 Default value: `"${db_dir}/locks"`
 
+##### <a name="locks_filename"></a>`locks_filename`
+
+Data type: `String`
+
+Name of the dconf locks file
+
+Default value: `'00-default'`
+
 ##### <a name="locks_file"></a>`locks_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Absolute path of the dconf db locks file
 
-Default value: `"${locks_dir}/00-default"`
+Default value: `"${locks_dir}/${locks_filename}"`
 
 ##### <a name="base_dir_mode"></a>`base_dir_mode`
 

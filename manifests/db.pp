@@ -60,6 +60,8 @@
 #
 # @param locks_dir Absolute path of the dconf db locks directory
 #
+# @param locks_filename Name of the dconf locks file
+#
 # @param locks_file Absolute path of the dconf db locks file
 #
 # @param base_dir_mode File permissions for dconf db base directory
@@ -86,7 +88,8 @@ define dconf::db (
   String $db_filename = '00-default',
   Stdlib::Absolutepath $db_file = "${db_dir}/${db_filename}",
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
-  Stdlib::Absolutepath $locks_file = "${locks_dir}/00-default",
+  String $locks_filename = '00-default',
+  Stdlib::Absolutepath $locks_file = "${locks_dir}/${locks_filename}",
   String $base_dir_mode = '0755',
   String $db_dir_mode  = '0755',
   String $db_file_mode = '0644',
@@ -116,12 +119,12 @@ define dconf::db (
       inifile::create_ini_settings($settings,$inifile_defaults)
     }
     if $locks {
-      file { $locks_dir:
-        ensure  => 'directory',
-        mode    => $locks_dir_mode,
-        purge   => $purge,
-        recurse => $purge,
-      }
+      ensure_resource(file, $locks_dir, {
+          ensure  => 'directory',
+          mode    => $locks_dir_mode,
+          purge   => $purge,
+          recurse => $purge,
+      })
       concat { "db_${name}_locks":
         path    => $locks_file,
         mode    => $locks_file_mode,
