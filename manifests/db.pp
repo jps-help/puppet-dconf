@@ -109,6 +109,7 @@ define dconf::db (
         mode    => $db_dir_mode,
         purge   => $purge,
         recurse => $purge,
+        force   => $purge,
     })
     file { $db_file:
       ensure  => 'file',
