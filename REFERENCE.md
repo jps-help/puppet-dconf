@@ -111,7 +111,7 @@ dconf::db { 'local':
 
 ```puppet
 dconf::db { 'system-proxy':
-  db_dir      => '/etc/dconf/db/local',
+  db_dir      => '/etc/dconf/db/local.d',
   db_filename => 'system-proxy',
   settings    => {
     'system/proxy/http' => {
@@ -121,7 +121,7 @@ dconf::db { 'system-proxy':
   },
 }
 dconf::db { 'disable-microphone':
-  db_dir      => '/etc/dconf/db/local',
+  db_dir      => '/etc/dconf/db/local.d',
   db_filename => 'disable-micrphone',
   settings    => {
     'org/gnome/desktop/privacy' => {
