@@ -10,8 +10,8 @@
 
 ### Defined types
 
-* [`dconf::db`](#dconfdb): Create dconf db keyfiles
-* [`dconf::profile`](#dconfprofile): Create dconf profiles
+* [`dconf::db`](#dconf--db): Create dconf db keyfiles
+* [`dconf::profile`](#dconf--profile): Create dconf profiles
 
 ## Classes
 
@@ -31,20 +31,22 @@ include dconf
 
 The following parameters are available in the `dconf` class:
 
-* [`manage_packages`](#manage_packages)
-* [`packages`](#packages)
-* [`profiles`](#profiles)
-* [`dbs`](#dbs)
+* [`manage_packages`](#-dconf--manage_packages)
+* [`packages`](#-dconf--packages)
+* [`db_base_dir`](#-dconf--db_base_dir)
+* [`profile_base_dir`](#-dconf--profile_base_dir)
+* [`profiles`](#-dconf--profiles)
+* [`dbs`](#-dconf--dbs)
 
-##### <a name="manage_packages"></a>`manage_packages`
+##### <a name="-dconf--manage_packages"></a>`manage_packages`
 
 Data type: `Boolean`
 
 Whether to manage the dconf packages.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="packages"></a>`packages`
+##### <a name="-dconf--packages"></a>`packages`
 
 Data type: `Array`
 
@@ -52,25 +54,41 @@ The packages required for dconf management. Typically sourced via hiera.
 
 Default value: `[]`
 
-##### <a name="profiles"></a>`profiles`
+##### <a name="-dconf--db_base_dir"></a>`db_base_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The base directory for dconf db files
+
+Default value: `'/etc/dconf/db'`
+
+##### <a name="-dconf--profile_base_dir"></a>`profile_base_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The base directory for dconf profiles
+
+Default value: `'/etc/dconf/profile'`
+
+##### <a name="-dconf--profiles"></a>`profiles`
 
 Data type: `Optional[Hash]`
 
 Hash of dconf profiles
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="dbs"></a>`dbs`
+##### <a name="-dconf--dbs"></a>`dbs`
 
 Data type: `Optional[Hash]`
 
 Hash of dconf databases, settings and locks
 
-Default value: ``undef``
+Default value: `undef`
 
 ## Defined types
 
-### <a name="dconfdb"></a>`dconf::db`
+### <a name="dconf--db"></a>`dconf::db`
 
 Create dconf db keyfiles
 
@@ -135,57 +153,47 @@ dconf::db { 'disable-microphone':
 
 The following parameters are available in the `dconf::db` defined type:
 
-* [`settings`](#settings)
-* [`locks`](#locks)
-* [`base_dir`](#base_dir)
-* [`db_dir`](#db_dir)
-* [`db_filename`](#db_filename)
-* [`db_file`](#db_file)
-* [`locks_dir`](#locks_dir)
-* [`locks_filename`](#locks_filename)
-* [`locks_file`](#locks_file)
-* [`base_dir_mode`](#base_dir_mode)
-* [`db_dir_mode`](#db_dir_mode)
-* [`db_file_mode`](#db_file_mode)
-* [`locks_dir_mode`](#locks_dir_mode)
-* [`locks_file_mode`](#locks_file_mode)
-* [`purge`](#purge)
-* [`ensure`](#ensure)
-* [`inifile_defaults`](#inifile_defaults)
+* [`settings`](#-dconf--db--settings)
+* [`locks`](#-dconf--db--locks)
+* [`db_dir`](#-dconf--db--db_dir)
+* [`db_filename`](#-dconf--db--db_filename)
+* [`db_file`](#-dconf--db--db_file)
+* [`locks_dir`](#-dconf--db--locks_dir)
+* [`locks_filename`](#-dconf--db--locks_filename)
+* [`locks_file`](#-dconf--db--locks_file)
+* [`db_dir_mode`](#-dconf--db--db_dir_mode)
+* [`db_file_mode`](#-dconf--db--db_file_mode)
+* [`locks_dir_mode`](#-dconf--db--locks_dir_mode)
+* [`locks_file_mode`](#-dconf--db--locks_file_mode)
+* [`purge`](#-dconf--db--purge)
+* [`ensure`](#-dconf--db--ensure)
+* [`inifile_defaults`](#-dconf--db--inifile_defaults)
 
-##### <a name="settings"></a>`settings`
+##### <a name="-dconf--db--settings"></a>`settings`
 
 Data type: `Optional[Hash]`
 
 Hash of dconf settings
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="locks"></a>`locks`
+##### <a name="-dconf--db--locks"></a>`locks`
 
 Data type: `Optional[Array]`
 
 Array of dconf settings to lock
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="base_dir"></a>`base_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-Absolute path of the dconf db base directory
-
-Default value: `'/etc/dconf/db'`
-
-##### <a name="db_dir"></a>`db_dir`
+##### <a name="-dconf--db--db_dir"></a>`db_dir`
 
 Data type: `Stdlib::Absolutepath`
 
 Absolute path of the dconf db directory
 
-Default value: `"${base_dir}/${name}.d"`
+Default value: `"${dconf::db_base_dir}/${name}.d"`
 
-##### <a name="db_filename"></a>`db_filename`
+##### <a name="-dconf--db--db_filename"></a>`db_filename`
 
 Data type: `String`
 
@@ -193,7 +201,7 @@ Name of the dconf db file
 
 Default value: `'00-default'`
 
-##### <a name="db_file"></a>`db_file`
+##### <a name="-dconf--db--db_file"></a>`db_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -201,7 +209,7 @@ Absolute path of the dconf db file
 
 Default value: `"${db_dir}/${db_filename}"`
 
-##### <a name="locks_dir"></a>`locks_dir`
+##### <a name="-dconf--db--locks_dir"></a>`locks_dir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -209,7 +217,7 @@ Absolute path of the dconf db locks directory
 
 Default value: `"${db_dir}/locks"`
 
-##### <a name="locks_filename"></a>`locks_filename`
+##### <a name="-dconf--db--locks_filename"></a>`locks_filename`
 
 Data type: `String`
 
@@ -217,7 +225,7 @@ Name of the dconf locks file
 
 Default value: `'00-default'`
 
-##### <a name="locks_file"></a>`locks_file`
+##### <a name="-dconf--db--locks_file"></a>`locks_file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -225,15 +233,7 @@ Absolute path of the dconf db locks file
 
 Default value: `"${locks_dir}/${locks_filename}"`
 
-##### <a name="base_dir_mode"></a>`base_dir_mode`
-
-Data type: `String`
-
-File permissions for dconf db base directory
-
-Default value: `'0755'`
-
-##### <a name="db_dir_mode"></a>`db_dir_mode`
+##### <a name="-dconf--db--db_dir_mode"></a>`db_dir_mode`
 
 Data type: `String`
 
@@ -241,7 +241,7 @@ File permissions for dconf db directory
 
 Default value: `'0755'`
 
-##### <a name="db_file_mode"></a>`db_file_mode`
+##### <a name="-dconf--db--db_file_mode"></a>`db_file_mode`
 
 Data type: `String`
 
@@ -249,7 +249,7 @@ File permissions for dconf db file
 
 Default value: `'0644'`
 
-##### <a name="locks_dir_mode"></a>`locks_dir_mode`
+##### <a name="-dconf--db--locks_dir_mode"></a>`locks_dir_mode`
 
 Data type: `String`
 
@@ -257,7 +257,7 @@ File permissions for dconf db locks directory
 
 Default value: `'0755'`
 
-##### <a name="locks_file_mode"></a>`locks_file_mode`
+##### <a name="-dconf--db--locks_file_mode"></a>`locks_file_mode`
 
 Data type: `String`
 
@@ -265,15 +265,15 @@ File permissions for dconf db locks file
 
 Default value: `'0644'`
 
-##### <a name="purge"></a>`purge`
+##### <a name="-dconf--db--purge"></a>`purge`
 
 Data type: `Boolean`
 
 Whether to purge unmanaged files (keyfiles and lock files)
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-dconf--db--ensure"></a>`ensure`
 
 Data type: `Enum['present','absent']`
 
@@ -281,7 +281,7 @@ Whether to ensure presence or absence of the resource
 
 Default value: `'present'`
 
-##### <a name="inifile_defaults"></a>`inifile_defaults`
+##### <a name="-dconf--db--inifile_defaults"></a>`inifile_defaults`
 
 Data type: `Hash`
 
@@ -289,7 +289,7 @@ Default parameters to parse to inifile provider
 
 Default value: `{ ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], }`
 
-### <a name="dconfprofile"></a>`dconf::profile`
+### <a name="dconf--profile"></a>`dconf::profile`
 
 Create dconf profiles
 
@@ -320,40 +320,21 @@ dconf::profile { 'local':
 
 The following parameters are available in the `dconf::profile` defined type:
 
-* [`profile_dir`](#profile_dir)
-* [`profile_file`](#profile_file)
-* [`profile_dir_mode`](#profile_dir_mode)
-* [`profile_file_mode`](#profile_file_mode)
-* [`purge`](#purge)
-* [`ensure`](#ensure)
-* [`default_entry_order`](#default_entry_order)
-* [`entries`](#entries)
+* [`profile_file`](#-dconf--profile--profile_file)
+* [`profile_file_mode`](#-dconf--profile--profile_file_mode)
+* [`ensure`](#-dconf--profile--ensure)
+* [`default_entry_order`](#-dconf--profile--default_entry_order)
+* [`entries`](#-dconf--profile--entries)
 
-##### <a name="profile_dir"></a>`profile_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-Absolute path to dconf profile directory
-
-Default value: `'/etc/dconf/profile'`
-
-##### <a name="profile_file"></a>`profile_file`
+##### <a name="-dconf--profile--profile_file"></a>`profile_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Absolute path to dconf profile file
 
-Default value: `"${profile_dir}/${name}"`
+Default value: `"${dconf::profile_base_dir}/${name}"`
 
-##### <a name="profile_dir_mode"></a>`profile_dir_mode`
-
-Data type: `String`
-
-File permissions for dconf profile directory
-
-Default value: `'0755'`
-
-##### <a name="profile_file_mode"></a>`profile_file_mode`
+##### <a name="-dconf--profile--profile_file_mode"></a>`profile_file_mode`
 
 Data type: `String`
 
@@ -361,15 +342,7 @@ File permissions for dconf profile file
 
 Default value: `'0644'`
 
-##### <a name="purge"></a>`purge`
-
-Data type: `Boolean`
-
-Control whether to purge the dconf profile directory of unmanaged files
-
-Default value: ``false``
-
-##### <a name="ensure"></a>`ensure`
+##### <a name="-dconf--profile--ensure"></a>`ensure`
 
 Data type: `Enum['present','absent']`
 
@@ -377,7 +350,7 @@ Whether to ensure presence or absence of the dconf profile
 
 Default value: `'present'`
 
-##### <a name="default_entry_order"></a>`default_entry_order`
+##### <a name="-dconf--profile--default_entry_order"></a>`default_entry_order`
 
 Data type: `String`
 
@@ -385,11 +358,11 @@ Default order of profile entries
 
 Default value: `'25'`
 
-##### <a name="entries"></a>`entries`
+##### <a name="-dconf--profile--entries"></a>`entries`
 
 Data type: `Optional[Hash]`
 
 List of entries to include in the dconf profile
 
-Default value: ``undef``
+Default value: `undef`
 

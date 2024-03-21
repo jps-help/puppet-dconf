@@ -50,8 +50,6 @@
 #
 # @param locks Array of dconf settings to lock
 #
-# @param base_dir Absolute path of the dconf db base directory
-#
 # @param db_dir Absolute path of the dconf db directory
 #
 # @param db_filename Name of the dconf db file
@@ -63,8 +61,6 @@
 # @param locks_filename Name of the dconf locks file
 #
 # @param locks_file Absolute path of the dconf db locks file
-#
-# @param base_dir_mode File permissions for dconf db base directory
 #
 # @param db_dir_mode File permissions for dconf db directory
 #
@@ -83,14 +79,12 @@
 define dconf::db (
   Optional[Hash] $settings = undef,
   Optional[Array] $locks = undef,
-  Stdlib::Absolutepath $base_dir = '/etc/dconf/db',
-  Stdlib::Absolutepath $db_dir = "${base_dir}/${name}.d",
+  Stdlib::Absolutepath $db_dir = "${dconf::db_base_dir}/${name}.d",
   String $db_filename = '00-default',
   Stdlib::Absolutepath $db_file = "${db_dir}/${db_filename}",
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
   String $locks_filename = '00-default',
   Stdlib::Absolutepath $locks_file = "${locks_dir}/${locks_filename}",
-  String $base_dir_mode = '0755',
   String $db_dir_mode  = '0755',
   String $db_file_mode = '0644',
   String $locks_dir_mode = '0755',
@@ -99,61 +93,71 @@ define dconf::db (
   Enum['present','absent'] $ensure = 'present',
   Hash $inifile_defaults = { ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], },
 ) {
-  ensure_resource(file, $base_dir, {
-      ensure => 'directory',
-      mode   => $base_dir_mode,
-  })
-  if $ensure == 'present' {
-    ensure_resource(file, $db_dir, {
-        ensure  => 'directory',
-        mode    => $db_dir_mode,
-        purge   => $purge,
-        recurse => $purge,
-        force   => $purge,
-    })
-    file { $db_file:
-      ensure  => 'file',
-      mode    => $db_file_mode,
-      require => File[$db_dir],
-    }
-    if $settings {
-      inifile::create_ini_settings($settings,$inifile_defaults)
-    }
-    if $locks {
-      ensure_resource(file, $locks_dir, {
+  case $ensure {
+    'present': {
+      ensure_resource(file, $db_dir, {
           ensure  => 'directory',
-          mode    => $locks_dir_mode,
+          mode    => $db_dir_mode,
           purge   => $purge,
           recurse => $purge,
+          force   => $purge,
       })
-      concat { "db_${name}_locks":
-        path    => $locks_file,
-        mode    => $locks_file_mode,
-        order   => 'alpha',
-        require => File[$locks_dir],
+      file { $db_file:
+        ensure  => 'file',
+        mode    => $db_file_mode,
+        require => File[$db_dir],
       }
-      $locks.each |$lock| {
-        concat::fragment { "db_${name}_locks_${lock}":
-          target  => $locks_file,
-          content => "${lock}\n",
-          require => Concat["db_${name}_locks"],
-          notify  => Exec['dconf_update'],
+      if $settings {
+        $settings.each |String $section, Hash $key_vals| {
+          $key_vals.each |String $setting, String $value| {
+            ini_setting { "db_${name}_settings_${section}_${setting}":
+              path    => $db_file,
+              section => $section,
+              setting => $setting,
+              value   => $value,
+              notify  => Exec['dconf_update'],
+            }
+          }
+        }
+      }
+      if $locks {
+        ensure_resource(file, $locks_dir, {
+            ensure  => 'directory',
+            mode    => $locks_dir_mode,
+            purge   => $purge,
+            recurse => $purge,
+        })
+        concat { "db_${name}_locks":
+          path    => $locks_file,
+          mode    => $locks_file_mode,
+          order   => 'alpha',
+          require => File[$locks_dir],
+        }
+        $locks.each |$lock| {
+          concat::fragment { "db_${name}_locks_${lock}":
+            target  => $locks_file,
+            content => "${lock}\n",
+            require => Concat["db_${name}_locks"],
+            notify  => Exec['dconf_update'],
+          }
         }
       }
     }
-  } elsif $ensure == 'absent' {
-    file { $db_dir:
-      ensure  => 'absent',
-      purge   => true,
-      recurse => true,
-      force   => true,
+    'absent': {
+      file { $db_dir:
+        ensure  => 'absent',
+        purge   => true,
+        recurse => true,
+        force   => true,
+      }
+      -> file { "${dconf::db_base_dir}/${name}":
+        ensure => 'absent',
+        force  => true,
+        notify => Exec['dconf_update'],
+      }
     }
-    -> file { "${base_dir}/${name}":
-      ensure => 'absent',
-      force  => true,
-      notify => Exec['dconf_update'],
+    default: {
+      warning("Unknown resource state for dconf database.\nReceived: ${ensure}\nExpected: 'present' OR 'absent'")
     }
-  } else {
-    warning("Unknown resource state for dconf database.\nReceived: ${ensure}\nExpected: 'present' OR 'absent'")
   }
 }
