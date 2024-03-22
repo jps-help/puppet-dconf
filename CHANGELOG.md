@@ -1,6 +1,31 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## Release 0.2.0
+### Breaking
+- Remove `dconf::db::base_dir` parameter
+- Remove `dconf::db::base_dir_mode` in favour of hard-coded value `0755`
+- Remove `dconf::profile::profile_dir` parameter
+- Remove `dconf::profile::profile_dir_mode` parameter
+### Added
+- New parameter `dconf::db_base_dir`
+- New parameter `dconf::profile_base_dir`
+- Unit testing and CI/CD workflows
+### Changed
+- `dconf::db::db_dir` parameter is now formed using `dconf::db_base_dir` parameter
+- `dconf::profile::profile_file` parameter is now formed using `dconf::profile_base_dir` parameter
+- Convert if/elsif logic to case statement for `dconf::db`
+- Convert if/elsif logic to case statement for `dconf::profile`
+- Replace `create_ini_settings()` function in `dconf::db` with native Puppet resource iteration
+- `/etc/dconf/db` directory is now ensured by the main class
+- `/etc/dconf/profile` directory is now ensured by the main class
+- Replace `ensure_packages()` function in main class with native Puppet resource iteration
+- Remove unused `dconf::profile::purge` parameter
+- Set upper bounderies for module dependencies
+### Fixed
+- Fixed incorrect directory mode for generated `dconf::db` resources
+
 ## Release 0.1.1
 ### Added
 - Allow multiple db files/lockfiles to be managed under a single dconf db directory ([#5](https://github.com/jps-help/dconf/issues/5))
