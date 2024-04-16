@@ -109,7 +109,7 @@ define dconf::db (
       }
       if $settings {
         $settings.each |String $section, Hash $key_vals| {
-          $key_vals.each |String $setting, String $value| {
+          $key_vals.each |String $setting, $value| {
             ini_setting { "db_${name}_settings_${section}_${setting}":
               path    => $db_file,
               section => $section,
