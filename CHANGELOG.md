@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Set upper bounderies for module dependencies
 ### Fixed
 - Fixed incorrect directory mode for generated `dconf::db` resources
+- Fixed hiera lookups
 
 ## Release 0.1.1
 ### Added
