@@ -30,17 +30,25 @@ class dconf (
       }
     }
   }
-  file { $profile_base_dir:
+  file { '/etc/dconf':
     ensure => 'directory',
     mode   => '0755',
     owner  => 'root',
     group  => 'root',
   }
+  file { $profile_base_dir:
+    ensure  => 'directory',
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+    require => File['/etc/dconf'],
+  }
   file { $db_base_dir:
-    ensure => 'directory',
-    mode   => '0755',
-    owner  => 'root',
-    group  => 'root',
+    ensure  => 'directory',
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+    require => File['/etc/dconf'],
   }
   # Generate resources from hiera
   if $profiles {
