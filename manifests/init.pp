@@ -30,6 +30,12 @@ class dconf (
       }
     }
   }
+  file { '/etc/dconf':
+    ensure => 'directory',
+    mode   => '0755',
+    owner  => 'root',
+    group  => 'root',
+  }
   file { $profile_base_dir:
     ensure => 'directory',
     mode   => '0755',
