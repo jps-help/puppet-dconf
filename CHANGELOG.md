@@ -1,6 +1,11 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## Release 0.2.1
+### Added
+- Ensure `/etc/dconf` directory
+### Fixed
+- Prevent dependency failures if `/etc/dconf` is not present. Can occur if dconf package is not installed yet and is explicitly not managed by the module.
 
 ## Release 0.2.0
 ### Breaking
