@@ -1,6 +1,18 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## Release 0.2.2
+### Added
+- Declare support for Puppet 8
+- Declare support for Ubuntu 24.04
+- Add templates for db and locks files
+- Add commented headers for managed files
+### Changed
+- Use templates for db and locks files instead of inifile
+- Update spec tests for db and lock file generation
+### Removed
+- Remove dependency on puppetlabs-inifile
+
 ## Release 0.2.1
 ### Added
 - Ensure `/etc/dconf` directory
