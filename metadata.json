@@ -10,10 +10,6 @@
   "tags": ["dconf","gnome","gdm"],
   "dependencies": [
     {
-      "name": "puppetlabs/inifile",
-      "version_requirement": ">= 4.2.0 < 7.0.0"
-    },
-    {
       "name": "puppetlabs/concat",
       "version_requirement": ">= 4.1.0 < 10.0.0"
     },

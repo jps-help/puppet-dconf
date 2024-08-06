@@ -74,8 +74,6 @@
 #
 # @param ensure Whether to ensure presence or absence of the resource
 #
-# @param inifile_defaults Default parameters to parse to inifile provider
-#
 define dconf::db (
   Optional[Hash] $settings = undef,
   Optional[Array] $locks = undef,
@@ -91,7 +89,6 @@ define dconf::db (
   String $locks_file_mode = '0644',
   Boolean $purge = true,
   Enum['present','absent'] $ensure = 'present',
-  Hash $inifile_defaults = { ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], },
 ) {
   case $ensure {
     'present': {
