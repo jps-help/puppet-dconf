@@ -112,6 +112,7 @@ define dconf::db (
         mode    => $db_file_mode,
         content => "${_db_file_header}${_db_file_body}",
         require => File[$db_dir],
+        notify  => Exec['dconf_update'],
       }
       if $locks {
         ensure_resource(file, $locks_dir, {
@@ -131,6 +132,7 @@ define dconf::db (
           mode    => $locks_file_mode,
           content => "${_locks_file_header}${_locks_file_body}",
           require => File[$locks_dir],
+          notify  => Exec['dconf_update'],
         }
       }
     }
