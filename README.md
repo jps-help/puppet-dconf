@@ -157,9 +157,7 @@ dconf::dbs:
     locks: []
 ```
 ## Limitations
-
-This module only ensures the specified settings are present in your dconf keyfiles. Unmanaged INI settings in your keyfiles will not be automatically removed.
-This is a limitation of the `puppetlabs/inifile` module used to generate the dconf keyfiles.
+No known limitations
 
 ## Development
 

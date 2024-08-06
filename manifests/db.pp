@@ -74,8 +74,6 @@
 #
 # @param ensure Whether to ensure presence or absence of the resource
 #
-# @param inifile_defaults Default parameters to parse to inifile provider
-#
 define dconf::db (
   Optional[Hash] $settings = undef,
   Optional[Array] $locks = undef,
@@ -91,7 +89,6 @@ define dconf::db (
   String $locks_file_mode = '0644',
   Boolean $purge = true,
   Enum['present','absent'] $ensure = 'present',
-  Hash $inifile_defaults = { ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], },
 ) {
   case $ensure {
     'present': {
@@ -102,23 +99,17 @@ define dconf::db (
           recurse => $purge,
           force   => $purge,
       })
+      $_db_file_header = epp('dconf/header.epp')
+      $_db_file_body = epp('dconf/db.epp', {
+          'settings' => $settings
+        }
+      )
       file { $db_file:
         ensure  => 'file',
         mode    => $db_file_mode,
+        content => "${_db_file_header}${_db_file_body}",
         require => File[$db_dir],
-      }
-      if $settings {
-        $settings.each |String $section, Hash $key_vals| {
-          $key_vals.each |String $setting, $value| {
-            ini_setting { "db_${name}_settings_${section}_${setting}":
-              path    => $db_file,
-              section => $section,
-              setting => $setting,
-              value   => $value,
-              notify  => Exec['dconf_update'],
-            }
-          }
-        }
+        notify  => Exec['dconf_update'],
       }
       if $locks {
         ensure_resource(file, $locks_dir, {
@@ -127,19 +118,18 @@ define dconf::db (
             purge   => $purge,
             recurse => $purge,
         })
-        concat { "db_${name}_locks":
+        $_locks_file_header = epp('dconf/header.epp')
+        $_locks_file_body = epp('dconf/locks.epp', {
+            'locks' => $locks
+          }
+        )
+        file { "db_${name}_locks":
+          ensure  => $ensure,
           path    => $locks_file,
           mode    => $locks_file_mode,
-          order   => 'alpha',
+          content => "${_locks_file_header}${_locks_file_body}",
           require => File[$locks_dir],
-        }
-        $locks.each |$lock| {
-          concat::fragment { "db_${name}_locks_${lock}":
-            target  => $locks_file,
-            content => "${lock}\n",
-            require => Concat["db_${name}_locks"],
-            notify  => Exec['dconf_update'],
-          }
+          notify  => Exec['dconf_update'],
         }
       }
     }

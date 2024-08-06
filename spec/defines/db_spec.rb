@@ -22,34 +22,24 @@ describe 'dconf::db' do
 
       it { is_expected.to compile }
       it { is_expected.to contain_file("/etc/dconf/db/#{title}.d").with_ensure('directory') }
-      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-default").with_ensure('file') }
-      it {
-        params['settings'].each do |section, key_vals|
-          key_vals.each do |setting, _value|
-            is_expected.to contain_ini_setting("db_#{title}_settings_#{section}_#{setting}").with_notify('Exec[dconf_update]')
-          end
-        end
-      }
+      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-default").with_ensure('file').with_content(%r{[system/proxy/http]}) }
+      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-default").with_ensure('file').with_content(%r{host = '172.16.0.1'}) }
+      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-default").with_ensure('file').with_content(%r{enabled = true}) }
 
       context 'with locks' do
         let(:params) do
           super().merge(
             {
               'locks' => [
-                'system/proxy/http/host',
-                'system/proxy/http/enabled',
+                '/system/proxy/http/host',
+                '/system/proxy/http/enabled',
               ],
             },
           )
         end
 
         it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/locks").with_ensure('directory') }
-        it { is_expected.to contain_concat("db_#{title}_locks").with_ensure('present') }
-        it {
-          params['locks'].each do |lock|
-            is_expected.to contain_concat__fragment("db_#{title}_locks_#{lock}").with_notify('Exec[dconf_update]')
-          end
-        }
+        it { is_expected.to contain_file("db_#{title}_locks").with_ensure('present').with_content(%r{/system/proxy/http/host\n/system/proxy/http/enabled}) }
 
         context 'with purge' do
           let(:params) do

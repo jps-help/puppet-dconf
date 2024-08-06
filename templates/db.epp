@@ -1,0 +1,6 @@
+<% | Hash $settings | -%>
+<% $settings.each |String $section, Hash $key_vals| { -%>
+[<%= $section %>]
+<% $key_vals.each |String $key, $value| { -%>
+<%= $key %> = <%= $value %>
+<% }} -%>

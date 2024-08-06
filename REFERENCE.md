@@ -167,7 +167,6 @@ The following parameters are available in the `dconf::db` defined type:
 * [`locks_file_mode`](#-dconf--db--locks_file_mode)
 * [`purge`](#-dconf--db--purge)
 * [`ensure`](#-dconf--db--ensure)
-* [`inifile_defaults`](#-dconf--db--inifile_defaults)
 
 ##### <a name="-dconf--db--settings"></a>`settings`
 
@@ -280,14 +279,6 @@ Data type: `Enum['present','absent']`
 Whether to ensure presence or absence of the resource
 
 Default value: `'present'`
-
-##### <a name="-dconf--db--inifile_defaults"></a>`inifile_defaults`
-
-Data type: `Hash`
-
-Default parameters to parse to inifile provider
-
-Default value: `{ ensure => 'present', path => $db_file, notify => Exec['dconf_update'], require => File[$db_file], }`
 
 ### <a name="dconf--profile"></a>`dconf::profile`
 
