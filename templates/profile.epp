@@ -1,0 +1,4 @@
+<% | Hash $entries | -%>
+<% $entries.each | String $name, Hash $settings | { -%>
+<%= $settings['type'] -%>-db:<%= $name %>
+<% } -%>
