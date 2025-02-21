@@ -1,6 +1,10 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## Release 0.2.3
+### Changed
+- Ensure `dconf::packages` are installed before calling `Exec['dconf_update']`
+
 ## Release 0.2.2
 ### Added
 - Declare support for Puppet 8
