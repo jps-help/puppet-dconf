@@ -24,7 +24,12 @@ class dconf (
 ) {
   # Ensure dconf and config directories
   if $manage_packages {
-    include dconf::install
+    $packages.each | String $package | {
+      package { $package:
+        ensure => 'installed',
+        before => Exec['dconf_update'],
+      }
+    }
   }
   file { '/etc/dconf':
     ensure => 'directory',
