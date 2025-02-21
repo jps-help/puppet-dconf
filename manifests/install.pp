@@ -9,6 +9,7 @@ class dconf::install {
   $dconf::packages.each | String $package | {
     package { $package:
       ensure => 'installed',
+      before => Exec['dconf_update'],
     }
   }
 }
