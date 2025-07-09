@@ -81,7 +81,7 @@ define dconf::db (
   String $db_filename = '00-default',
   Stdlib::Absolutepath $db_file = "${db_dir}/${db_filename}",
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
-  String $locks_filename = '00-default',
+  String $locks_filename = $db_filename,
   Stdlib::Absolutepath $locks_file = "${locks_dir}/${locks_filename}",
   String $db_dir_mode  = '0755',
   String $db_file_mode = '0644',
