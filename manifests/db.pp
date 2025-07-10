@@ -78,7 +78,7 @@ define dconf::db (
   Optional[Hash] $settings = undef,
   Optional[Array] $locks = undef,
   Stdlib::Absolutepath $db_dir = "${dconf::db_base_dir}/${name}.d",
-  String $db_filename = '00-default',
+  String $db_filename = 'default',
   Stdlib::Absolutepath $db_file = "${db_dir}/${db_filename}",
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
   String $locks_filename = $db_filename,
@@ -92,44 +92,35 @@ define dconf::db (
 ) {
   case $ensure {
     'present': {
-      ensure_resource(file, $db_dir, {
-          ensure  => 'directory',
-          mode    => $db_dir_mode,
-          purge   => $purge,
-          recurse => $purge,
-          force   => $purge,
-      })
-      $_db_file_header = epp('dconf/header.epp')
-      $_db_file_body = epp('dconf/db.epp', {
-          'settings' => $settings
+      # Settings
+      file { $db_dir:
+        ensure  => 'directory',
+        mode    => $db_dir_mode,
+        purge   => $purge,
+        recurse => $purge,
+        force   => $purge,
+      }
+      if $settings {
+        dconf::cfg_file { $db_filename:
+          ensure    => $ensure,
+          settings  => $settings,
+          parent_db => $db_dir,
+          priority  => '00',
         }
-      )
-      file { $db_file:
-        ensure  => 'file',
-        mode    => $db_file_mode,
-        content => "${_db_file_header}${_db_file_body}",
-        require => File[$db_dir],
-        notify  => Exec['dconf_update'],
+      }
+      # Locks
+      file { $locks_dir:
+        ensure  => 'directory',
+        mode    => $locks_dir_mode,
+        purge   => $purge,
+        recurse => $purge,
       }
       if $locks {
-        ensure_resource(file, $locks_dir, {
-            ensure  => 'directory',
-            mode    => $locks_dir_mode,
-            purge   => $purge,
-            recurse => $purge,
-        })
-        $_locks_file_header = epp('dconf/header.epp')
-        $_locks_file_body = epp('dconf/locks.epp', {
-            'locks' => $locks
-          }
-        )
-        file { "db_${name}_locks":
-          ensure  => $ensure,
-          path    => $locks_file,
-          mode    => $locks_file_mode,
-          content => "${_locks_file_header}${_locks_file_body}",
-          require => File[$locks_dir],
-          notify  => Exec['dconf_update'],
+        dconf::locks_file { $locks_filename:
+          ensure    => $ensure,
+          locks     => $locks,
+          parent_db => $db_dir,
+          priority  => '00',
         }
       }
     }
