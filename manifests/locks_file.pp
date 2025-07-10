@@ -8,12 +8,13 @@ define dconf::locks_file (
   Array $locks,
   Stdlib::Absolutepath $parent_db,
   Stdlib::Absolutepath $locks_dir = "${parent_db}/locks",
-  Pattern[/^[0-9]+$/] $priority = 50,
+  Pattern[/^[0-9]+$/] $priority = '50',
   String $filename = "${priority}-${name}",
   Stdlib::Absolutepath $file_path = "${locks_dir}/${filename}",
   String $file_mode = '0644',
   Enum['present','absent'] $ensure = 'present',
 ) {
+  include dconf
   case $ensure {
     'present': {
       $_locks_file_header = epp('dconf/header.epp')

@@ -7,12 +7,13 @@
 define dconf::cfg_file (
   Hash $settings,
   Stdlib::Absolutepath $parent_db,
-  Pattern[/^[0-9]+$/] $priority = 50,
+  Pattern[/^[0-9]+$/] $priority = '50',
   String $filename = "${priority}-${name}",
   Stdlib::Absolutepath $file_path = "${parent_db}/${filename}",
   String $file_mode = '0644',
   Enum['present','absent'] $ensure = 'present',
 ) {
+  include dconf
   case $ensure {
     'present': {
       # Generate config file content
