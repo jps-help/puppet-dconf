@@ -37,11 +37,7 @@ On its own, this will simply install the dconf packages for your distro.
 
 ## Usage
 
-Include usage examples for common use cases in the **Usage** section. Show your
-users how to use your module to solve problems, and be sure to include code
-examples. Include three to five examples of the most important or common tasks a
-user can accomplish with your module. Show users how to accomplish more complex
-tasks that involve different types, classes, and functions working in tandem.
+Below are some examples of how to use the module in your own environment.
 ### Creating a dconf profile
 ```
 dconf::profile { 'user':
@@ -68,6 +64,8 @@ system-db:local
 system-db:site
 ```
 ### Creating a dconf settings file with locks
+For a simple deployment, you may only need a single dconf keyfile and locks file.
+You can create the dconf db itself, along with a keyfile and locks file using a single `dconf::db` resource.
 ```
 dconf::db { 'local':
   settings => {
@@ -86,9 +84,9 @@ Will result in the following dconf database structure:
 |-- db
 |   |-- local
 |   `-- local.d
-|       |-- 00-default
+|       |-- 00-local_default
 |       `-- locks
-|           `-- 00-default
+|           `-- 00-local_default
 ```
 #### local.d/00-default
 ```
@@ -103,7 +101,7 @@ enabled = true
 ```
 ### Configure dconf with hiera
 This module can also be configured entirely using hiera.
-To configure the above with hiera, use the following snippet:
+To configure the above example using only hiera, try the following snippet:
 ```
 dconf::profiles:
   'user':
@@ -128,7 +126,7 @@ dconf::dbs:
       - '/system/proxy/http/enabled'
 
 ```
-Note that some dconf values must be double quoted to ensure the resulting dconf ini keyfile contains the correct data.
+Note that some dconf values must be double quoted to ensure the resulting dconf ini keyfile contains the correct data type.
 
 ### Removing dconf profiles and databases
 To remove dconf profiles and databases, you can use the `ensure` parameter.
@@ -156,6 +154,54 @@ dconf::dbs:
   'local':
     locks: []
 ```
+### Working with multiple keyfiles and lock files
+In some environments, it may be desirable to split your dconf configuration into multiple files for a given db.
+You can do this using `dconf::keyfile` and `dconf::locks_file` resources.
+
+First, create a `dconf::db` resource to create the necessary folder structure. The below snippet creates an empty dconf db folder structure.
+```
+dconf::db { 'example1':
+  ensure => 'present',
+  purge => true,
+}
+```
+Now you can create any number of dconf keyfiles or locks files.
+
+The title for each `dconf::keyfile` and `dconf::locks_files` must be unique. Therefore, it's best to prefix each file with the name of the db it's being deployed to.
+```
+dconf::keyfile { 'example1_settings':
+  ensure   => 'present',
+  priority => '90',
+  parent_db => '/etc/dconf/db/example1.d',
+  settings => {
+    'system/proxy/http' => {
+      'host' => '172.16.0.1',
+      'enabled' => 'true',
+    },
+  },
+}
+
+dconf::locks_file { 'example1_settings':
+  ensure   => 'present',
+  priority => '90'
+  parent_db => '/etc/dconf/db/example1.d',
+  locks => [
+    '/system/proxy/http/host',
+    '/system/proxy/http/enabled',
+  ],
+}
+```
+The above would result in the following structure:
+```
+/etc/dconf/
+|-- db
+|   |-- example1
+|   `-- example1.d
+|       |-- 90-example1_settings
+|       `-- locks
+|           `-- 90-example1_settings
+```
+
 ## Limitations
 No known limitations
 
