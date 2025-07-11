@@ -1,10 +1,32 @@
-# @summary A short summary of the purpose of this defined type.
+# @summary Generate arbitrary dconf keyfiles
 #
-# A description of what this defined type does
+# @example Deploy a simple keyfile under /etc/dconf/db/local.d/
+#   dconf::keyfile { "example_default":
+#     ensure    => 'present',
+#     settings  => {
+#       'system/proxy/http' => {
+#         'host'    => "'172.16.0.1'",
+#         'enabled' => 'true',
+#     },
+#     parent_db => '/etc/dconf/db/local.d',
+#     priority  => '00',
+#   }
 #
-# @example
-#   dconf::cfg_file { 'namevar': }
-define dconf::cfg_file (
+# @param ensure Set the state of the resource
+# 
+# @param settings A hash of dconf settings
+# 
+# @param parent_db Absolute path to the dconf db directory (e.g. '/etc/dconf/db/local.d')
+#
+# @param priority Numerical value used to set the keyfile priority (keyfiles are read in lexicographical order)
+#
+# @param filename Name of the keyfile to create
+#
+# @param file_path Absolute path of the keyfile to create
+#
+# @param file_mode File permissions for dconf keyfile
+#
+define dconf::keyfile (
   Hash $settings,
   Stdlib::Absolutepath $parent_db,
   Pattern[/^[0-9]+$/] $priority = '50',

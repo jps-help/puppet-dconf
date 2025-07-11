@@ -101,7 +101,7 @@ define dconf::db (
         force   => $purge,
       }
       if $settings {
-        dconf::cfg_file { "${name}_${db_filename}":
+        dconf::keyfile { "${name}_${db_filename}":
           ensure    => $ensure,
           settings  => $settings,
           parent_db => $db_dir,

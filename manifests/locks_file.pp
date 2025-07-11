@@ -1,9 +1,31 @@
-# @summary A short summary of the purpose of this defined type.
+# @summary Generate arbitrary dconf locks files
 #
-# A description of what this defined type does
+# @example Deploy a simple locks file under /etc/dconf/db/local.d/locks/
+#   dconf::locks_file { 'example_default':
+#     ensure => 'present',
+#     parent_db => '/etc/dconf/db/local.d',
+#     priority => '00',
+#     locks => [
+#       'system/proxy/http/host',
+#       'system/proxy/http/enabled',
+#     ],
+#   }
 #
-# @example
-#   dconf::locks_file { 'namevar': }
+# @param ensure Set the state of the resource
+# 
+# @param locks A hash of dconf locks
+# 
+# @param parent_db Absolute path to the dconf db directory (e.g. '/etc/dconf/db/local.d')
+#
+# @param locks_dir Absolute path to the dconf locks directory
+#
+# @param priority Numerical value used to set the locks file priority (locks files are read in lexicographical order)
+#
+# @param filename Name of the locks file to create
+#
+# @param file_path Absolute path of the locks file to create
+#
+# @param file_mode File permissions for dconf locks file
 define dconf::locks_file (
   Array $locks,
   Stdlib::Absolutepath $parent_db,

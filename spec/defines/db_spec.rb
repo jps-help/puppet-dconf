@@ -23,7 +23,7 @@ describe 'dconf::db' do
       it { is_expected.to compile }
       it { is_expected.to contain_file("/etc/dconf/db")}
       it { is_expected.to contain_file("/etc/dconf/db/#{title}.d").with_ensure('directory') }
-      it { is_expected.to contain_dconf__cfg_file("#{title}_default")}
+      it { is_expected.to contain_dconf__keyfile("#{title}_default")}
       it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-#{title}_default")}
 
       context 'with locks' do

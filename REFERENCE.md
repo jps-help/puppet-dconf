@@ -11,6 +11,8 @@
 ### Defined types
 
 * [`dconf::db`](#dconf--db): Create dconf db keyfiles
+* [`dconf::keyfile`](#dconf--keyfile): Generate arbitrary dconf keyfiles
+* [`dconf::locks_file`](#dconf--locks_file): Generate arbitrary dconf locks files
 * [`dconf::profile`](#dconf--profile): Create dconf profiles
 
 ## Classes
@@ -198,7 +200,7 @@ Data type: `String`
 
 Name of the dconf db file
 
-Default value: `'00-default'`
+Default value: `'default'`
 
 ##### <a name="-dconf--db--db_file"></a>`db_file`
 
@@ -222,7 +224,7 @@ Data type: `String`
 
 Name of the dconf locks file
 
-Default value: `'00-default'`
+Default value: `$db_filename`
 
 ##### <a name="-dconf--db--locks_file"></a>`locks_file`
 
@@ -279,6 +281,184 @@ Data type: `Enum['present','absent']`
 Whether to ensure presence or absence of the resource
 
 Default value: `'present'`
+
+### <a name="dconf--keyfile"></a>`dconf::keyfile`
+
+Generate arbitrary dconf keyfiles
+
+#### Examples
+
+##### Deploy a simple keyfile under /etc/dconf/db/local.d/
+
+```puppet
+dconf::keyfile { "example_default":
+  ensure    => 'present',
+  settings  => {
+    'system/proxy/http' => {
+      'host'    => "'172.16.0.1'",
+      'enabled' => 'true',
+  },
+  parent_db => '/etc/dconf/db/local.d',
+  priority  => '00',
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `dconf::keyfile` defined type:
+
+* [`ensure`](#-dconf--keyfile--ensure)
+* [`settings`](#-dconf--keyfile--settings)
+* [`parent_db`](#-dconf--keyfile--parent_db)
+* [`priority`](#-dconf--keyfile--priority)
+* [`filename`](#-dconf--keyfile--filename)
+* [`file_path`](#-dconf--keyfile--file_path)
+* [`file_mode`](#-dconf--keyfile--file_mode)
+
+##### <a name="-dconf--keyfile--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set the state of the resource
+
+Default value: `'present'`
+
+##### <a name="-dconf--keyfile--settings"></a>`settings`
+
+Data type: `Hash`
+
+A hash of dconf settings
+
+##### <a name="-dconf--keyfile--parent_db"></a>`parent_db`
+
+Data type: `Stdlib::Absolutepath`
+
+Absolute path to the dconf db directory (e.g. '/etc/dconf/db/local.d')
+
+##### <a name="-dconf--keyfile--priority"></a>`priority`
+
+Data type: `Pattern[/^[0-9]+$/]`
+
+Numerical value used to set the keyfile priority (keyfiles are read in lexicographical order)
+
+Default value: `'50'`
+
+##### <a name="-dconf--keyfile--filename"></a>`filename`
+
+Data type: `String`
+
+Name of the keyfile to create
+
+Default value: `"${priority}-${name}"`
+
+##### <a name="-dconf--keyfile--file_path"></a>`file_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Absolute path of the keyfile to create
+
+Default value: `"${parent_db}/${filename}"`
+
+##### <a name="-dconf--keyfile--file_mode"></a>`file_mode`
+
+Data type: `String`
+
+File permissions for dconf keyfile
+
+Default value: `'0644'`
+
+### <a name="dconf--locks_file"></a>`dconf::locks_file`
+
+Generate arbitrary dconf locks files
+
+#### Examples
+
+##### Deploy a simple locks file under /etc/dconf/db/local.d/locks/
+
+```puppet
+dconf::locks_file { 'example_default':
+  ensure => 'present',
+  parent_db => '/etc/dconf/db/local.d',
+  priority => '00',
+  locks => [
+    'system/proxy/http/host',
+    'system/proxy/http/enabled',
+  ],
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `dconf::locks_file` defined type:
+
+* [`ensure`](#-dconf--locks_file--ensure)
+* [`locks`](#-dconf--locks_file--locks)
+* [`parent_db`](#-dconf--locks_file--parent_db)
+* [`priority`](#-dconf--locks_file--priority)
+* [`filename`](#-dconf--locks_file--filename)
+* [`file_path`](#-dconf--locks_file--file_path)
+* [`file_mode`](#-dconf--locks_file--file_mode)
+* [`locks_dir`](#-dconf--locks_file--locks_dir)
+
+##### <a name="-dconf--locks_file--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Set the state of the resource
+
+Default value: `'present'`
+
+##### <a name="-dconf--locks_file--locks"></a>`locks`
+
+Data type: `Array`
+
+A hash of dconf locks
+
+##### <a name="-dconf--locks_file--parent_db"></a>`parent_db`
+
+Data type: `Stdlib::Absolutepath`
+
+Absolute path to the dconf db directory (e.g. '/etc/dconf/db/local.d')
+
+##### <a name="-dconf--locks_file--priority"></a>`priority`
+
+Data type: `Pattern[/^[0-9]+$/]`
+
+Numerical value used to set the locks file priority (locks files are read in lexicographical order)
+
+Default value: `'50'`
+
+##### <a name="-dconf--locks_file--filename"></a>`filename`
+
+Data type: `String`
+
+Name of the locks file to create
+
+Default value: `"${priority}-${name}"`
+
+##### <a name="-dconf--locks_file--file_path"></a>`file_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Absolute path of the locks file to create
+
+Default value: `"${locks_dir}/${filename}"`
+
+##### <a name="-dconf--locks_file--file_mode"></a>`file_mode`
+
+Data type: `String`
+
+File permissions for dconf locks file
+
+Default value: `'0644'`
+
+##### <a name="-dconf--locks_file--locks_dir"></a>`locks_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `"${parent_db}/locks"`
 
 ### <a name="dconf--profile"></a>`dconf::profile`
 
