@@ -78,7 +78,7 @@ define dconf::db (
   Optional[Hash] $settings = undef,
   Optional[Array] $locks = undef,
   Stdlib::Absolutepath $db_dir = "${dconf::db_base_dir}/${name}.d",
-  String $db_filename = 'default',
+  String $db_filename = "${name}_default",
   Stdlib::Absolutepath $db_file = "${db_dir}/${db_filename}",
   Stdlib::Absolutepath $locks_dir = "${db_dir}/locks",
   String $locks_filename = $db_filename,
@@ -101,7 +101,7 @@ define dconf::db (
         force   => $purge,
       }
       if $settings {
-        dconf::keyfile { "${name}_${db_filename}":
+        dconf::keyfile { $db_filename:
           ensure    => $ensure,
           settings  => $settings,
           parent_db => $db_dir,
@@ -116,7 +116,7 @@ define dconf::db (
         recurse => $purge,
       }
       if $locks {
-        dconf::locks_file { "${name}_${locks_filename}":
+        dconf::locks_file { $locks_filename:
           ensure    => $ensure,
           locks     => $locks,
           parent_db => $db_dir,
