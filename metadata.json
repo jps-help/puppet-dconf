@@ -69,7 +69,7 @@
     "gnome",
     "gdm"
   ],
-  "pdk-version": "3.3.0",
-  "template-url": "pdk-default#3.3.0",
-  "template-ref": "tags/3.3.0-0-g5d17ec1"
+  "pdk-version": "3.5.0",
+  "template-url": "pdk-default#3.5.0",
+  "template-ref": "tags/3.5.0-0-ged6c77a"
 }
