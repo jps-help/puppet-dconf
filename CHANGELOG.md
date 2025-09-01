@@ -1,7 +1,7 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
-## WIP
+## Release 1.0.0
 ### Added
 - New `dconf::db_keyfile` defined type
   - Delegate creation of locks files to a separate resource
@@ -17,9 +17,9 @@ All notable changes to this project will be documented in this file.
   - Improve coverage
   - Distribute testing better between the spec tests
 ### Breaking
-- Only a single instance of a given dconf::db can be created via the dconf main class
-  - This may have been used to specify multiple db config files for a single db
-  - Admins should now use dconf::db_keyfile defined-type to create arbitrary db config files under any given db
+- Only a single instance of `dconf::db` can be created for a given dconf db directory under `/etc/dconf/db`
+  - This may have been used to specify multiple db keyfiles for a single `dconf::db` resource
+  - Admins should now use the `dconf::db_keyfile` and `dconf::db_locks` defined-types to create arbitrary db config files under any given db directory.
 - Added a separate `priority` parameter for dconf config and locks files. No need to specify the priority in the filename itself.
 
 
