@@ -4,10 +4,10 @@ require 'spec_helper'
 
 describe 'dconf::db_keyfile' do
   let(:title) { 'example' }
-  let(:pre_condition) {
+  let(:pre_condition) do
     # Simulate the directory existing
     "file { '/etc/dconf/db/local.d': ensure => 'directory' }"
-  }
+  end
   let(:params) do
     {
       'ensure' => 'present',
@@ -22,11 +22,6 @@ describe 'dconf::db_keyfile' do
     }
   end
 
-  let(:pre_condition) do
-    # Simulate the directory existing
-    "file { '/etc/dconf/db/local.d': ensure => 'directory' }"
-  end
-
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
@@ -35,7 +30,7 @@ describe 'dconf::db_keyfile' do
       it { is_expected.to contain_file("#{params['parent_db']}/#{params['priority']}-#{title}").with_content(%r{[system/proxy/http]}) }
       it { is_expected.to contain_file("#{params['parent_db']}/#{params['priority']}-#{title}").with_content(%r{host = '172.16.0.1'}) }
       it { is_expected.to contain_file("#{params['parent_db']}/#{params['priority']}-#{title}").with_content(%r{enabled = true}) }
-      it { is_expected.to contain_exec('dconf_update').with_refreshonly(true)}
+      it { is_expected.to contain_exec('dconf_update').with_refreshonly(true) }
       it { is_expected.to contain_file("#{params['parent_db']}/#{params['priority']}-#{title}").that_notifies('Exec[dconf_update]') }
     end
   end

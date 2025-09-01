@@ -21,10 +21,10 @@ describe 'dconf::db' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
-      it { is_expected.to contain_file("/etc/dconf/db")}
+      it { is_expected.to contain_file('/etc/dconf/db') }
       it { is_expected.to contain_file("/etc/dconf/db/#{title}.d").with_ensure('directory') }
-      it { is_expected.to contain_dconf__db_keyfile("#{title}_default")}
-      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-#{title}_default")}
+      it { is_expected.to contain_dconf__db_keyfile("#{title}_default") }
+      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-#{title}_default") }
 
       context 'with locks' do
         let(:params) do
@@ -39,7 +39,7 @@ describe 'dconf::db' do
         end
 
         it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/locks").with_ensure('directory') }
-        it { is_expected.to contain_dconf__db_locks("#{title}_default")}
+        it { is_expected.to contain_dconf__db_locks("#{title}_default") }
         it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/locks/00-#{title}_default") }
 
         context 'with purge' do
