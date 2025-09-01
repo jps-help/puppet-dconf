@@ -1,6 +1,9 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## Release 1.1.0
+### Changed
+Dropped EOL Linux releases from validation
 ## Release 1.0.0
 ### Added
 - New `dconf::db_keyfile` defined type
