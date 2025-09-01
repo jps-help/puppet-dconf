@@ -21,10 +21,10 @@ describe 'dconf::db' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile }
+      it { is_expected.to contain_file('/etc/dconf/db') }
       it { is_expected.to contain_file("/etc/dconf/db/#{title}.d").with_ensure('directory') }
-      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-default").with_ensure('file').with_content(%r{[system/proxy/http]}) }
-      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-default").with_ensure('file').with_content(%r{host = '172.16.0.1'}) }
-      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-default").with_ensure('file').with_content(%r{enabled = true}) }
+      it { is_expected.to contain_dconf__db_keyfile("#{title}_default") }
+      it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/00-#{title}_default") }
 
       context 'with locks' do
         let(:params) do
@@ -39,7 +39,8 @@ describe 'dconf::db' do
         end
 
         it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/locks").with_ensure('directory') }
-        it { is_expected.to contain_file("db_#{title}_locks").with_ensure('present').with_content(%r{/system/proxy/http/host\n/system/proxy/http/enabled}) }
+        it { is_expected.to contain_dconf__db_locks("#{title}_default") }
+        it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/locks/00-#{title}_default") }
 
         context 'with purge' do
           let(:params) do

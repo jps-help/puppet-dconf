@@ -8,6 +8,9 @@ describe 'dconf' do
       let(:facts) { os_facts }
 
       it { is_expected.to compile.with_all_deps }
+      it { is_expected.to contain_file('/etc/dconf') }
+      it { is_expected.to contain_file('/etc/dconf/db') }
+      it { is_expected.to contain_file('/etc/dconf/profile') }
       case os_facts[:osfamily]
       when 'Debian'
         it { is_expected.to contain_package('dconf-cli').with_ensure('installed') }

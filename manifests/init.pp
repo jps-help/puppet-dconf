@@ -54,12 +54,16 @@ class dconf (
   # Generate resources from hiera
   if $profiles {
     $profiles.each |String $profile, Hash $values| {
-      ensure_resource('dconf::profile', $profile, $values)
+      dconf::profile { $profile:
+        * => $values,
+      }
     }
   }
   if $dbs {
     $dbs.each |String $db, Hash $values| {
-      ensure_resource('dconf::db', $db, $values)
+      dconf::db { $db:
+        * => $values,
+      }
     }
   }
   # Execute dconf update

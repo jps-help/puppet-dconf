@@ -1,6 +1,28 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## Release 1.0.0
+### Added
+- New `dconf::db_keyfile` defined type
+  - Delegate creation of locks files to a separate resource
+  - Create arbitrary dconf config file
+- New `dconf::db_locks` defined type
+  - Delegate creation of locks files to a separate resource
+  - Create arbitrary dconf locks file
+### Changed
+- The locks directory is now always ensured when a `dconf::db` resource is created
+- Drop the use of `ensure_resource` function
+  - Switch to native puppet iterative resource creation in the main class
+- Update spec tests
+  - Improve coverage
+  - Distribute testing better between the spec tests
+### Breaking
+- Only a single instance of `dconf::db` can be created for a given dconf db directory under `/etc/dconf/db`
+  - This may have been used to specify multiple db keyfiles for a single `dconf::db` resource
+  - Admins should now use the `dconf::db_keyfile` and `dconf::db_locks` defined-types to create arbitrary db config files under any given db directory.
+- Added a separate `priority` parameter for dconf config and locks files. No need to specify the priority in the filename itself.
+
+
 ## Release 0.2.3
 ### Changed
 - Ensure `dconf::packages` are installed before calling `Exec['dconf_update']`
