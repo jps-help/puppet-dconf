@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'dconf::locks_file' do
+describe 'dconf::db_locks' do
   let(:title) { 'example' }
   let(:pre_condition) {
    # Simulate the directory existing

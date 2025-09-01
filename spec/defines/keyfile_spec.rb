@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'dconf::keyfile' do
+describe 'dconf::db_keyfile' do
   let(:title) { 'example' }
   let(:pre_condition) {
     # Simulate the directory existing

@@ -1,7 +1,7 @@
 # @summary Generate arbitrary dconf keyfiles
 #
 # @example Deploy a simple keyfile under /etc/dconf/db/local.d/
-#   dconf::keyfile { "example_default":
+#   dconf::db_keyfile { "example_default":
 #     ensure    => 'present',
 #     settings  => {
 #       'system/proxy/http' => {
@@ -26,7 +26,7 @@
 #
 # @param file_mode File permissions for dconf keyfile
 #
-define dconf::keyfile (
+define dconf::db_keyfile (
   Hash $settings,
   Stdlib::Absolutepath $parent_db,
   Pattern[/^[0-9]+$/] $priority = '50',

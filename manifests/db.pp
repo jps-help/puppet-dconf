@@ -101,7 +101,7 @@ define dconf::db (
         force   => $purge,
       }
       if $settings {
-        dconf::keyfile { $db_filename:
+        dconf::db_keyfile { $db_filename:
           ensure    => $ensure,
           settings  => $settings,
           parent_db => $db_dir,
@@ -116,7 +116,7 @@ define dconf::db (
         recurse => $purge,
       }
       if $locks {
-        dconf::locks_file { $locks_filename:
+        dconf::db_locks { $locks_filename:
           ensure    => $ensure,
           locks     => $locks,
           parent_db => $db_dir,

@@ -156,7 +156,7 @@ dconf::dbs:
 ```
 ### Working with multiple keyfiles and lock files
 In some environments, it may be desirable to split your dconf configuration into multiple files for a given db.
-You can do this using `dconf::keyfile` and `dconf::locks_file` resources.
+You can do this using `dconf::db_keyfile` and `dconf::db_locks` resources.
 
 First, create a `dconf::db` resource to create the necessary folder structure. The below snippet creates an empty dconf db folder structure.
 ```
@@ -167,9 +167,9 @@ dconf::db { 'example1':
 ```
 Now you can create any number of dconf keyfiles or locks files.
 
-The title for each `dconf::keyfile` and `dconf::locks_files` must be unique. Therefore, it's best to prefix each file with the name of the db it's being deployed to.
+The title for each `dconf::db_keyfile` and `dconf::db_lockss` must be unique. Therefore, it's best to prefix each file with the name of the db it's being deployed to.
 ```
-dconf::keyfile { 'example1_settings':
+dconf::db_keyfile { 'example1_settings':
   ensure   => 'present',
   priority => '90',
   parent_db => '/etc/dconf/db/example1.d',
@@ -181,7 +181,7 @@ dconf::keyfile { 'example1_settings':
   },
 }
 
-dconf::locks_file { 'example1_settings':
+dconf::db_locks { 'example1_settings':
   ensure   => 'present',
   priority => '90'
   parent_db => '/etc/dconf/db/example1.d',
