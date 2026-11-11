@@ -51,8 +51,8 @@ describe 'dconf::db' do
             )
           end
 
-          it { is_expected.to contain_file("/etc/dconf/db/#{title}.d").with_purge(true) }
-          it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/locks").with_purge(true) }
+          it { is_expected.to contain_file("/etc/dconf/db/#{title}.d").with_purge(true).that_notifies('Exec[dconf_update]') }
+          it { is_expected.to contain_file("/etc/dconf/db/#{title}.d/locks").with_purge(true).that_notifies('Exec[dconf_update]') }
         end
       end
     end
