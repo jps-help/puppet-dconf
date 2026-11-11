@@ -99,6 +99,7 @@ define dconf::db (
         purge   => $purge,
         recurse => $purge,
         force   => $purge,
+        notify  => Exec['dconf_update'],
       }
       if $settings {
         dconf::db_keyfile { $db_filename:
@@ -114,6 +115,7 @@ define dconf::db (
         mode    => $locks_dir_mode,
         purge   => $purge,
         recurse => $purge,
+        notify  => Exec['dconf_update'],
       }
       if $locks {
         dconf::db_locks { $locks_filename:
