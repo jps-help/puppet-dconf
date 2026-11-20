@@ -536,4 +536,3 @@ Data type: `Optional[Hash]`
 List of entries to include in the dconf profile
 
 Default value: `undef`
-
