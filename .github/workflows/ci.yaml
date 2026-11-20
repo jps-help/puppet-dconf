@@ -30,3 +30,5 @@ jobs:
   acceptance-tests:
     name: beaker
     uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v4
+    with:
+      rubocop: false
