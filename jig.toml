@@ -1,0 +1,13 @@
+# Per-module jig configuration.
+#
+# [template]  url/ref/commit of the template repository this module was
+#             scaffolded from; later jig commands in this module default to it.
+# [template.vars]
+#             values for the variables the templates declare; jig renew and
+#             jig new <component> render with these.
+# [renew]     paths = [...] -- files jig renew may re-render and overwrite.
+#             Empty by default so nothing is overwritten accidentally.
+# [build]     action = "allow" or "deny" (default "deny") with exceptions =
+#             [...]. Deny packages only the Puppet module spec allowlist plus
+#             the exceptions; allow packages everything except the exceptions.
+
