@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+
+source ENV['GEM_SOURCE'] || 'https://rubygems.org'
+
+gem 'hiera-eyaml',           ENV['RUBYGEM_HIERA_EYAML']
+gem 'librarian-puppet',      ENV['RUBYGEM_LIBRARIAN_PUPPET']
+gem 'modulesync',            ENV['RUBYGEM_MODULESYNC']
+gem 'openfact',              ENV['RUBYGEM_OPENFACT']
+gem 'openvox-strings',       ENV['RUBYGEM_OPENVOX_STRINGS']
+gem 'openvox',               ENV['RUBYGEM_OPENVOX']
+gem 'puppet_metadata',       ENV['RUBYGEM_PUPPET_METADATA']
+gem 'puppet-ghostbuster',    ENV['RUBYGEM_PUPPET_GHOSTBUSTER']
+gem 'r10k',                  ENV['RUBYGEM_R10K']
+gem 'ra10ke',                ENV['RUBYGEM_RA10KE']
+gem 'rspec_junit_formatter', ENV['RUBYGEM_RSPEC_JUNIT_FORMATTER']
+gem 'rubocop-capybara',      ENV['RUBYGEM_RUBOCOP_CAPYBARA']
+gem 'rubocop-factory_bot',   ENV['RUBYGEM_RUBOCOP_FACTORY_BOT']
+gem 'rubocop-gitlab_formatter', ENV['RUBYGEM_RUBOCOP_GITLAB_FORMATTER']
+gem 'rubocop-performance',   ENV['RUBYGEM_RUBOCOP_PERFORMANCE']
+gem 'rubocop-rspec_rails',   ENV['RUBYGEM_RUBOCOP_RSPEC_RAILS']
+gem 'toml-rb',               ENV['RUBYGEM_TOML_RB']
+gem 'toml',                  ENV['RUBYGEM_TOML']
+gem 'voxpupuli-acceptance',  ENV['RUBYGEM_VOXPUPULI_ACCEPTANCE']
+gem 'voxpupuli-release',     ENV['RUBYGEM_VOXPUPULI_RELEASE']
+gem 'voxpupuli-test',        ENV['RUBYGEM_VOXPUPULI_TEST']
+gem 'webmock',               ENV['RUBYGEM_WEBMOCK']
+
+# CVE fixes
+
+# Older fixes where update in the 3.2 minor releases:
+
+# https://github.com/ruby/ruby/releases/tag/v3_2_11
+# https://github.com/ruby/ruby/releases/tag/v3_2_10
+# https://github.com/ruby/ruby/releases/tag/v3_2_9
+# https://github.com/ruby/ruby/releases/tag/v3_2_8
+# https://github.com/ruby/ruby/releases/tag/v3_2_7
+# https://github.com/ruby/ruby/releases/tag/v3_2_6
+# https://github.com/ruby/ruby/releases/tag/v3_2_5
+# https://github.com/ruby/ruby/releases/tag/v3_2_4
+# https://github.com/ruby/ruby/releases/tag/v3_2_3
+# https://github.com/ruby/ruby/releases/tag/v3_2_2
+# https://github.com/ruby/ruby/releases/tag/v3_2_1
+
+gem 'net-imap', '>= 0.6.4'
+gem 'erb',      '>= 6.0.4'
+
+# cannot be fixed until r10k has an update to allow jwt > 3
+# gem 'jwt',      '>= 3.2.0'
+
+# new dependencies needed for rspec
+gem 'guard-rake', '~> 1.0'
+gem 'overcommit', '~> 0.68'
