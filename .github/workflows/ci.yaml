@@ -7,6 +7,23 @@ on:
   workflow_dispatch:
     
 jobs:
-  Spec:
-    uses: "puppetlabs/cat-github-actions/.github/workflows/module_ci.yml@main"
-    secrets: "inherit"
+  puppet-parser-validate:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/voxpupuli/voxbox:10.1.1-openvox8
+      options: --cpus 1
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+      - name: Run puppet parser validate
+        run: bundle exec rake -f /opt/voxbox/Rakefile validate 
+  rspec-tests:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/voxpupuli/voxbox:10.1.1-openvox8
+      options: --cpus 1
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+      - name: Run rspec tests
+        run: bundle exec rake -f /opt/voxbox/Rakefile spec
