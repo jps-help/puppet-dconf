@@ -208,7 +208,3 @@ No known limitations
 ## Development
 
 When contributing, please check your code conforms to the Puppet language style guide: https://www.puppet.com/docs/puppet/latest/style_guide.html
-
-[1]: https://puppet.com/docs/pdk/latest/pdk_generating_modules.html
-[2]: https://puppet.com/docs/puppet/latest/puppet_strings.html
-[3]: https://puppet.com/docs/puppet/latest/puppet_strings_style.html
