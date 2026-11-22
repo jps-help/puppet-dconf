@@ -5,4 +5,3 @@ fixtures:
   forge_modules:
     stdlib: "puppetlabs/stdlib"
     concat: "puppetlabs/concat"
-    inifile: "puppetlabs/inifile"
