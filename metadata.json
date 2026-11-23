@@ -4,9 +4,9 @@
   "author": "James McKenzie",
   "summary": "Install and configure dconf",
   "license": "Apache-2.0",
-  "source": "git://github.com/jps-help/dconf.git",
-  "project_page": "https://github.com/jps-help/dconf",
-  "issues_url": "https://github.com/jps-help/dconf",
+  "source": "https://github.com/jps-help/puppet-dconf",
+  "project_page": "https://github.com/jps-help/puppet-dconf",
+  "issues_url": "https://github.com/jps-help/puppet-dconf/issues",
   "dependencies": [
     {
       "name": "puppetlabs/concat",
