@@ -1,57 +1,55 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'dconf' do
-  it 'works idempotently with no errors' do
-    dconf_init = <<-PUPPET
-    include dconf
-    PUPPET
-    # Example dconf profile
-    dconf_profile = <<-PUPPET
-    dconf::profile { 'user':
-      entries => {
-        'user' => {
-          'type'  => 'user',
-          'order' => 10,
-         },
-        'local' => {
-          'type'  => 'system',
-          'order' => 21,
-        },
-        'site' => {
-          'type'  => 'system',
-          'order' => 22,
-        },
-      },
-    }
-    PUPPET
-    # Example dconf DB settings
-    dconf_db = <<-PUPPET
-    dconf::db { 'local':
-      settings => {
-        'system/proxy/http' => {
-          'host' => '172.16.0.1',
-          'enabled' => 'true',
-        },
-      locks => [
-        '/system/proxy/http/host',
-        '/system/proxy/http/enabled',
-      ],
-    }
-    PUPPET
-    
-    # Apply dconf
-    apply_manifest(dconf_init, catch_failures: true)
-    apply_manifest(dconf_init, catch_changes: true)
-    # Apply dconf::profile
-    apply_manifest(dconf_profile, catch_failures: true)
-    apply_manifest(dconf_profile, catch_changes: true)
-    # Apply dconf::db
-    apply_manifest(dconf_db, catch_failures: true)
-    apply_manifest(dconf_db, catch_changes: true)
-  end
+  context 'with a profile and a db' do
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<~PUPPET
+          include dconf
 
-  describe package('dconf') do
-    it { is_expected.to be_installed }
-  end
+          dconf::profile { 'user':
+            entries => {
+              'user'  => { 'type' => 'user', 'order' => 10 },
+              'local' => { 'type' => 'system', 'order' => 21 },
+            },
+          }
 
+          dconf::db { 'local':
+            settings => {
+              'system/proxy/http' => {
+                'host'    => "'172.16.0.1'",
+                'enabled' => 'true',
+              },
+            },
+            locks    => [
+              '/system/proxy/http/host',
+              '/system/proxy/http/enabled',
+            ],
+          }
+        PUPPET
+      end
+    end
+
+    describe package(fact('os.family') == 'Debian' ? 'dconf-cli' : 'dconf') do
+      it { is_expected.to be_installed }
+    end
+
+    describe file('/etc/dconf/profile/user') do
+      its(:content) { is_expected.to match(%r{^user-db:user\nsystem-db:local$}) }
+    end
+
+    describe file('/etc/dconf/db/local.d/locks/00-local_default') do
+      its(:content) { is_expected.to match(%r{^/system/proxy/http/host$}) }
+    end
+
+    describe file('/etc/dconf/db/local') do
+      it { is_expected.to be_file }
+    end
+
+    describe command('DCONF_PROFILE=user dconf read /system/proxy/http/host') do
+      its(:stdout) { is_expected.to eq("'172.16.0.1'\n") }
+    end
+  end
 end
